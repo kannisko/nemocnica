@@ -6,6 +6,7 @@ import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class AdminPanelDialog extends JDialog {
     private JPanel contentPane;
@@ -13,6 +14,8 @@ public class AdminPanelDialog extends JDialog {
     private JButton addTestData;
     private JButton createTables;
     private JButton createDataBase;
+    private JTextField databaseName;
+    private JButton chooseFolderButton;
     private JButton buttonCancel;
 
     private AppProperties appProperties;
@@ -27,12 +30,15 @@ public class AdminPanelDialog extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
         getRootPane().setDefaultButton(buttonOK);
+        databaseName.setText(this.appProperties.getDatabasenamePath());
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
             }
         });
+
+        chooseFolderButton.addActionListener(e -> onChooseDatabaseFolder());
 
         createDataBase.addActionListener(e -> {
             onCreateDataBase();
@@ -60,6 +66,19 @@ public class AdminPanelDialog extends JDialog {
     private void onCancel() {
         // add your code here if necessary
         dispose();
+    }
+
+    private void onChooseDatabaseFolder() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File(appProperties.getDatabasenamePath()));
+        chooser.setDialogTitle("Wybierz katalog dla bazy danych:");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String databaseNameString = chooser.getSelectedFile().getAbsolutePath();
+            databaseName.setText(databaseNameString);
+            appProperties.setDatabasenamePath(databaseNameString);
+        }
     }
 
     private void onCreateDataBase() {
