@@ -1,11 +1,15 @@
 package org.nemocnica.utils;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.util.Properties;
 
+//singleto pattern - jeden obiekt w całej aplikacji
 public class AppProperties {
+    private static final Logger logger = LoggerFactory.getLogger(AppProperties.class.getName());
+
     private static AppProperties instance = null;
 
     private static final String PROPERTY_FILENAME = "app.properties";
@@ -15,6 +19,7 @@ public class AppProperties {
     private String propertyFilePath;
     private Properties properties;
 
+    //zawsze ten sam jeden jedyny obiekt
     public static AppProperties getInstance() {
         if (instance == null) {
             instance = new AppProperties();
@@ -22,31 +27,34 @@ public class AppProperties {
         return instance;
     }
 
+    //prywatny konstruktor - nie można stworzyć obiektu tej klasy poza nią samą
     private AppProperties() {
         this.properties = new Properties();
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         this.propertyFilePath = rootPath + PROPERTY_FILENAME;
-        try {
-            properties.load(new FileInputStream(propertyFilePath));
+        //try-with-resources - zamyka otwarte pliki etc.
+        try (InputStream inputStream = new FileInputStream(propertyFilePath)) {
+            properties.load(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("error loading properties from file {}", propertyFilePath, e);
         }
     }
 
-    public String getDatabasenamePath(){
-        return properties.getProperty(PROPERTY_DATABASE_PATH,DEFAULT_DATABASE_PATH);
+    public String getDatabasenamePath() {
+        return properties.getProperty(PROPERTY_DATABASE_PATH, DEFAULT_DATABASE_PATH);
     }
 
-    public void setDatabasenamePath(String path){
-        properties.setProperty(PROPERTY_DATABASE_PATH,path);
+    public void setDatabasenamePath(String path) {
+        properties.setProperty(PROPERTY_DATABASE_PATH, path);
         saveProperties();
     }
 
-    public void saveProperties(){
-        try {
-            properties.store(new FileOutputStream(propertyFilePath),"#");
+    public void saveProperties() {
+        //try-with-resources - zamyka otwarte pliki etc.
+        try (OutputStream outputStream = new FileOutputStream(propertyFilePath)) {
+            properties.store(outputStream, "#");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("error writting properties from file {}", propertyFilePath, e);
         }
     }
 }

@@ -15,7 +15,6 @@ public class AdminPanel{
     private JButton createDataBase;
     private JTextField databaseName;
     private JButton chooseFolderButton;
-    private JButton buttonCancel;
 
     private AppProperties appProperties;
     private MainFrame topLevelFrame;
@@ -24,21 +23,13 @@ public class AdminPanel{
         this.topLevelFrame = topLevelFrame;
         this.appProperties = AppProperties.getInstance();
 
-//        setTitle("Nemocnica - Admin Panel");
-//        setContentPane(panel);
-//        setModal(true);
-//        setResizable(false);
-//        setLocationRelativeTo(null);
-//        getRootPane().setDefaultButton(backButton);
         databaseName.setText(this.appProperties.getDatabasenamePath());
 
         backButton.addActionListener(e->topLevelFrame.setUserAdminChooser());
 
         chooseFolderButton.addActionListener(e -> onChooseDatabaseFolder());
 
-        createDataBase.addActionListener(e -> {
-            onCreateDataBase();
-        });
+        createDataBase.addActionListener(e -> onCreateDataBase());
     }
 
     public JPanel getPanel() {
