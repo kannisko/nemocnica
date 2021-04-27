@@ -6,11 +6,10 @@ import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.File;
 
-public class AdminPanelDialog extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
+public class AdminPanel{
+    private JPanel panel;
+    private JButton backButton;
     private JButton addTestData;
     private JButton createTables;
     private JButton createDataBase;
@@ -19,53 +18,31 @@ public class AdminPanelDialog extends JDialog {
     private JButton buttonCancel;
 
     private AppProperties appProperties;
+    private MainFrame topLevelFrame;
 
-
-    public AdminPanelDialog() {
+    public AdminPanel(MainFrame topLevelFrame) {
+        this.topLevelFrame = topLevelFrame;
         this.appProperties = AppProperties.getInstance();
 
-        setTitle("Nemocnica - Admin Panel");
-        setContentPane(contentPane);
-        setModal(true);
-        setResizable(false);
-        setLocationRelativeTo(null);
-        getRootPane().setDefaultButton(buttonOK);
+//        setTitle("Nemocnica - Admin Panel");
+//        setContentPane(panel);
+//        setModal(true);
+//        setResizable(false);
+//        setLocationRelativeTo(null);
+//        getRootPane().setDefaultButton(backButton);
         databaseName.setText(this.appProperties.getDatabasenamePath());
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        backButton.addActionListener(e->topLevelFrame.setUserAdminChooser());
 
         chooseFolderButton.addActionListener(e -> onChooseDatabaseFolder());
 
         createDataBase.addActionListener(e -> {
             onCreateDataBase();
         });
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
-    }
-
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
+    public JPanel getPanel() {
+        return panel;
     }
 
     private void onChooseDatabaseFolder() {
@@ -84,17 +61,11 @@ public class AdminPanelDialog extends JDialog {
     private void onCreateDataBase() {
         try {
             DatabaseOperations.createEmptyDatabase(appProperties.getDatabasenamePath());
-            JOptionPane.showMessageDialog(this, "Dabase created succesfully");
+            JOptionPane.showMessageDialog(topLevelFrame, "Dabase created succesfully");
         } catch (UserMessageException exception) {
 
-            JOptionPane.showMessageDialog(this, exception.getMessage());
+            JOptionPane.showMessageDialog(topLevelFrame, exception.getMessage());
         }
     }
 
-    public static void main(String[] args) {
-        AdminPanelDialog dialog = new AdminPanelDialog();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
 }
