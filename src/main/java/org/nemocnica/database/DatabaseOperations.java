@@ -1,4 +1,6 @@
 package org.nemocnica.database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.nemocnica.utils.UserMessageException;
 import java.io.File;
 import java.sql.Connection;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 
 
 public class DatabaseOperations {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseOperations.class.getName());
     private static final String PARAM_CREATE = ";create=true";
 
 
@@ -16,8 +19,9 @@ public class DatabaseOperations {
             Connection connection = DriverManager.getConnection(connectionString);
             return connection;
         }catch (SQLException exception){
-            //log!!!
-            throw new UserMessageException("cannot connect database\n"+exception.getMessage());
+            String message = "cannot connect database \"" + pathName + "\"";
+            logger.error(message,exception);
+            throw new UserMessageException(message+"\n"+exception.getMessage());
         }
     }
 
@@ -30,11 +34,15 @@ public class DatabaseOperations {
         File directory  = new File(pathName);
         if( directory.exists() ) {
             if(directory.isFile()){
-                throw new UserMessageException( "cannot create database\n"+pathName+" is file");
+                String message =  "cannot create database \""+pathName+"\" is file";
+                logger.error(message);
+                throw new UserMessageException(message);
             }
 
             if( directory.isDirectory() && directory.listFiles().length != 0 ) {
-                throw new UserMessageException( "cannot create database\n"+pathName+" is non empty directory");
+                String message =  "cannot create database \""+pathName+"\" is not empty directory";
+                logger.error(message);
+                throw new UserMessageException(message);
             }
         }
         String connectionString = getConnectionString(pathName) + PARAM_CREATE;
@@ -42,7 +50,7 @@ public class DatabaseOperations {
             Connection connection = DriverManager.getConnection(connectionString);
             connection.close();
         }catch (SQLException exception){
-            //log!!!
+            logger.error("cannot create database \"{}\" {}",pathName,exception.getMessage(),exception);
             throw new UserMessageException("cannot create database\n"+exception.getMessage());
         }
     }
