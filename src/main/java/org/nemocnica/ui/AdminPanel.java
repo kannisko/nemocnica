@@ -30,6 +30,8 @@ public class AdminPanel{
         chooseFolderButton.addActionListener(e -> onChooseDatabaseFolder());
 
         createDataBase.addActionListener(e -> onCreateDataBase());
+        createTables.addActionListener(e->onCreateTables());
+        addTestData.addActionListener(e->onAddTestData());
     }
 
     public JPanel getPanel() {
@@ -54,7 +56,24 @@ public class AdminPanel{
             DatabaseOperations.createEmptyDatabase(appProperties.getDatabasenamePath());
             JOptionPane.showMessageDialog(topLevelFrame, "Dabase created succesfully");
         } catch (UserMessageException exception) {
+            JOptionPane.showMessageDialog(topLevelFrame, exception.getMessage());
+        }
+    }
 
+    private void onCreateTables() {
+        try {
+            DatabaseOperations.createTables(appProperties.getDatabasenamePath());
+            JOptionPane.showMessageDialog(topLevelFrame, "Tables created succesfully");
+        } catch (UserMessageException exception) {
+            JOptionPane.showMessageDialog(topLevelFrame, exception.getMessage());
+        }
+
+    }
+    private void onAddTestData() {
+        try {
+            DatabaseOperations.addTestData(appProperties.getDatabasenamePath());
+            JOptionPane.showMessageDialog(topLevelFrame, "Test data added");
+        } catch (UserMessageException exception) {
             JOptionPane.showMessageDialog(topLevelFrame, exception.getMessage());
         }
     }

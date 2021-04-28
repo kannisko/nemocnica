@@ -1,13 +1,19 @@
 package org.nemocnica.database;
 
+import org.nemocnica.utils.AppProperties;
+import org.nemocnica.utils.Entry;
+import org.nemocnica.utils.XmlToObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.nemocnica.utils.UserMessageException;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.*;
+import java.util.List;
+import java.util.Map;
 
 
 public class DatabaseOperations {
@@ -47,5 +53,61 @@ public class DatabaseOperations {
             logger.error("cannot create database \"{}\"", pathName,  exception);
             throw new UserMessageException("cannot create database\n" + exception.getMessage());
         }
+    }
+
+    public static void createTables(String pathName) throws UserMessageException {
+        List<Entry> tablesToCreate = XmlToObjects.getList("/sql/create.xml");
+        String key=null;
+        try (
+                Connection connection = connectToDatabase(pathName);
+                Statement stmt = connection.createStatement()) {
+            for(Entry entry : tablesToCreate){
+                key= entry.getKey();
+                stmt.executeUpdate(entry.getValue());
+            }
+
+        } catch (SQLException exception) {
+            logger.error("error while creating tables {} ",key, exception);
+            throw new UserMessageException("error while creating tables "+key+"\n"+exception.getMessage());
+        }
+    }
+
+    public static void addTestData(String pathName) throws UserMessageException {
+        try (
+                Connection connection = connectToDatabase(pathName);
+                Statement stmt = connection.createStatement();
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(DatabaseOperations.class.getResourceAsStream("/sql/insert.txt")) )) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                stmt.executeUpdate(line);
+            }
+            connection.commit();
+        } catch (SQLException | IOException exception) {
+            logger.error("error while inserting data", exception);
+            throw new UserMessageException("error while inserting data "+exception.getMessage());
+        }
+    }
+
+    public static void main(String args[]) throws UserMessageException, SQLException {
+        //wypisz co wtablicy doktorzy
+        Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
+        Statement stmt = connection.createStatement();
+        String sql = "SELECT * FROM DOCTORS";
+        ResultSet rs = stmt.executeQuery(sql);
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+        while(rs.next()){
+            for( int column=1; column<=columnCount; column++){
+                Object obj = rs.getObject(column);
+                String str = obj != null ? obj.toString() : "null";
+                System.out.print(str+"  ");
+            }
+            //Display values
+            System.out.println();
+        }
+        rs.close();
+        connection.close();
     }
 }
