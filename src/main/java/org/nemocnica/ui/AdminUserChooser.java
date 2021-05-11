@@ -17,6 +17,7 @@ public class AdminUserChooser {
         exitButton.addActionListener(e->topLevelFrame.dispose());
 
         adminButton.addActionListener(e->topLevelFrame.setAdminPanel());
-        userButton.addActionListener(e->JOptionPane.showMessageDialog(topLevelFrame, "Jak wymyślę, wynik przyślę (okienko usera)"));
+        userButton.addActionListener(e->topLevelFrame.setUserPanel());
+                //e->JOptionPane.showMessageDialog(topLevelFrame, "Jak wymyślę, wynik przyślę (okienko usera)"));
     }
 }

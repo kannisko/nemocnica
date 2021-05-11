@@ -91,7 +91,7 @@ public class DatabaseOperations {
     }
 
     public static void main(String args[]) throws UserMessageException, SQLException {
-        //wypisz co wtablicy doktorzy
+        //wypisz co w tablicy doktorzy
         Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
         Statement stmt = connection.createStatement();
         String sql = "SELECT * FROM DOCTORS";

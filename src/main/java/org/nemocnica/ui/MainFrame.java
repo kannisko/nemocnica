@@ -23,6 +23,9 @@ public class MainFrame extends JFrame{
     public void setUserAdminChooser(){
         setNewContent(new AdminUserChooser(this).getPanel(),false);
     }
+    public void setUserPanel(){
+        setNewContent( new UserPanel(this).getPanel(),true);
+    }
 
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
