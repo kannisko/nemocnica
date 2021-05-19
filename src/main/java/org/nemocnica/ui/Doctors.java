@@ -1,6 +1,7 @@
 package org.nemocnica.ui;
 
 import org.nemocnica.database.DatabaseOperations;
+import org.nemocnica.utils.AppProperties;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
