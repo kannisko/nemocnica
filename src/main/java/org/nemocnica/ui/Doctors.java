@@ -79,12 +79,24 @@ public class Doctors {
                 data.add(currentRow);
             }
 
-            return new DefaultTableModel(data, columnNames);
+            //tak zwana anonimowa klasa, nadpisuje niektóre metody
+            return new DefaultTableModel(data, columnNames) {
 
-        } catch (SQLException exception) {
-            throw new UserMessageException(exception.getMessage());
-        }
+                // https://stackoverflow.com/questions/21350011/java-how-to-disable-the-jtable-editable-when-click-it
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false; // or a condition at your choice with row and column
+                }
+            };
+
+    } catch(
+    SQLException exception)
+
+    {
+        throw new UserMessageException(exception.getMessage());
     }
+
+}
 
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();

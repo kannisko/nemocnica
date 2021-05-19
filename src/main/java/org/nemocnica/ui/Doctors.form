@@ -29,7 +29,7 @@
                   <autoCreateRowSorter value="false"/>
                   <cellSelectionEnabled value="false"/>
                   <editingColumn value="1"/>
-                  <enabled value="false"/>
+                  <enabled value="true"/>
                   <toolTipText value=""/>
                   <updateSelectionOnSort value="false"/>
                 </properties>
