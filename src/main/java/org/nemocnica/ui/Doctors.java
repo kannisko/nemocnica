@@ -138,6 +138,8 @@ public class Doctors {
         doctorsTable.setModel(tableModel);
         // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        doctorsTable.setRowSelectionInterval(0,0);
+        if( tableModel.getRowCount() >0) {
+            doctorsTable.setRowSelectionInterval(0, 0);
+        }
     }
 }
