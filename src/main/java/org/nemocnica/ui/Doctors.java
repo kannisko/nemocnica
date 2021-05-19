@@ -69,17 +69,29 @@ public class Doctors {
     }
 
     private void editDoctor() {
+        int selectedRow = doctorsTable.getSelectedRow();
+        if( selectedRow < 0){ //nic nie zaznaczone, może pusto?
+            return;
+        }
+        TableModel model = doctorsTable.getModel();
         //dane tego co wybrane w tabeli
         DoctorDataClass data = new DoctorDataClass();
-        data.setFirstName("Koziołek");
-        data.setLastName("Matołek");
+
+        data.setId((int)model.getValueAt(selectedRow,0));
+        data.setFirstName(model.getValueAt(selectedRow,1).toString());
+        data.setLastName(model.getValueAt(selectedRow,2).toString());
 
         DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
-            JOptionPane.showMessageDialog(null, "OK kliknięte - trzeba będzie zmienic dane");
+            String updateString = data.getUpdateString();
+            try {
+                DatabaseOperations.executeStatement(connection,updateString);
+                refreshDoctorsTab();
+            } catch (UserMessageException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
-
     }
 
     TableModel getTableModel() throws UserMessageException {

@@ -52,4 +52,14 @@ public class DoctorDataClass {
         insert += ")";
         return insert;
     }
+
+    public String getUpdateString(){
+        String update = "UPDATE DOCTORS SET ";
+        update += "name='" + getFirstName() + "',";
+        update += "surname='" + getLastName() + "'";
+        //reszta wartości jak bedzie mozna edytować
+
+        update += " WHERE doctor_id=" + getId();
+        return update;
+    }
 }
