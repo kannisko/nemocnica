@@ -58,7 +58,7 @@ public class DoctorDataClass {
             throw new UserMessageException("First letter of last name should be uppercase");
         }
         else {
-            this.firstName = lastName;
+            this.lastName = lastName;
         }
     }
 
