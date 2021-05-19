@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.apache.commons.lang3.StringUtils;
+import org.nemocnica.utils.UserMessageException;
 
 public class DoctorsAddEdit extends JDialog {
     private JPanel contentPane;
@@ -11,6 +12,11 @@ public class DoctorsAddEdit extends JDialog {
     private JButton buttonCancel;
     private JTextField firstName;
     private JTextField lastName;
+    private JTextField specialization;
+    private JTextField position;
+    private JTextField chiefDoctorId;
+    private JTextField departmentId;
+    private JTextField salary;
     private DoctorDataClass data;
     boolean add; //dodajemy nowego czy edytujemy?
     public DoctorsAddEdit(String title,DoctorDataClass data,boolean add) {
@@ -63,17 +69,20 @@ public class DoctorsAddEdit extends JDialog {
     }
 
     private void onOK() {
-        data.setFirstName(firstName.getText());
-        data.setLastName(lastName.getText());
-        if(StringUtils.isEmpty(data.getFirstName())|StringUtils.isEmpty(data.getLastName())) {
-            JOptionPane.showMessageDialog(contentPane, "Data incomplete");
-        }
-        else if(!isNameDataValid(data.getFirstName())|!isNameDataValid(data.getLastName())) {
-            JOptionPane.showMessageDialog(contentPane, "Names can only contain letters");
-        }
-        else {
+        try {
+            data.setFirstName(firstName.getText());
+            data.setLastName(lastName.getText());
+            data.setSpecialization(specialization.getText());
+            data.setPosition(position.getText());
+            data.setChiefDoctorId(chiefDoctorId.getText());
+            data.setDepartmentId(departmentId.getText());
+            data.setSalary(salary.getText());
+
             data.setoKButtonClicked(true);
             dispose();
+        }
+        catch (UserMessageException exception) {
+            JOptionPane.showMessageDialog(contentPane, exception.getMessage());
         }
     }
 

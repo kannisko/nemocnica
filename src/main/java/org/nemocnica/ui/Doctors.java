@@ -76,11 +76,14 @@ public class Doctors {
         TableModel model = doctorsTable.getModel();
         //dane tego co wybrane w tabeli
         DoctorDataClass data = new DoctorDataClass();
-
-        data.setId((int)model.getValueAt(selectedRow,0));
-        data.setFirstName(model.getValueAt(selectedRow,1).toString());
-        data.setLastName(model.getValueAt(selectedRow,2).toString());
-
+        try {
+            data.setId((int) model.getValueAt(selectedRow, 0));
+            data.setFirstName(model.getValueAt(selectedRow, 1).toString());
+            data.setLastName(model.getValueAt(selectedRow, 2).toString());
+        }
+        catch (UserMessageException exception) {
+            throw new IllegalStateException("This should never happen, illegal values in database");
+        }
         DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
