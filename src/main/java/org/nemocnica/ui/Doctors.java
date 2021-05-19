@@ -58,8 +58,9 @@ public class Doctors {
     }
 
     TableModel getTableModel() throws UserMessageException {
-        try {
-            Statement stmt = connection.createStatement();
+        //try-with-resources - zamknie statement nawet jak wyjatek czy cos takiego
+        //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+        try (Statement stmt = connection.createStatement() ){
             String sql = "SELECT * FROM DOCTORS";
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
