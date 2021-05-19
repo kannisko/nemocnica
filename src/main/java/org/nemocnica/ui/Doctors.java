@@ -80,6 +80,16 @@ public class Doctors {
             data.setId((int) model.getValueAt(selectedRow, 0));
             data.setFirstName(model.getValueAt(selectedRow, 1).toString());
             data.setLastName(model.getValueAt(selectedRow, 2).toString());
+            data.setSpecialization(model.getValueAt(selectedRow, 3).toString());
+            data.setPosition(model.getValueAt(selectedRow, 4).toString());
+            if(model.getValueAt(selectedRow, 5) == null) {
+                data.setChiefDoctorId(null);
+            }
+            else {
+                data.setChiefDoctorId(model.getValueAt(selectedRow, 5).toString());
+            }
+            data.setDepartmentId(model.getValueAt(selectedRow, 6).toString());
+            data.setSalary(model.getValueAt(selectedRow, 7).toString());
         }
         catch (UserMessageException exception) {
             throw new IllegalStateException("This should never happen, illegal values in database");

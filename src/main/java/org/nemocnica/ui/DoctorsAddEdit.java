@@ -33,6 +33,16 @@ public class DoctorsAddEdit extends JDialog {
         if( !this.add){
             firstName.setText(data.getFirstName());
             lastName.setText(data.getLastName());
+            specialization.setText(data.getSpecialization());
+            position.setText(data.getPosition());
+            if(data.getChiefDoctorId() == null) {
+                chiefDoctorId.setText("");
+            }
+            else {
+                chiefDoctorId.setText(data.getChiefDoctorId().toString());
+            }
+            departmentId.setText(data.getDepartmentId().toString());
+            salary.setText(data.getSalary().toString());
         }
 
         buttonOK.addActionListener(new ActionListener() {

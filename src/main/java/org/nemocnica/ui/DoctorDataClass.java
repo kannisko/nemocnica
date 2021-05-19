@@ -12,11 +12,12 @@ public class DoctorDataClass {
     private String position;
     private Integer chiefDoctorId;
     private Integer departmentId;
-    private int salary;
+    private Double salary;
 
     private String onlyLettersRegex = "^[a-zA-Z]+$";
     private String capitalFirstLetterRegex = "[A-Z]\\S+";
     private String onlyNumbersRegex = "^[0-9]+$";
+    private String onlyDoubleRegex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
 
     private boolean oKButtonClicked;
 
@@ -130,23 +131,23 @@ public class DoctorDataClass {
 
     public void setSalary(String salary) throws UserMessageException {
         if(StringUtils.isEmpty(salary)) {
-            this.salary = 0;
+            this.salary = 0.0;
         }
-        else if(!salary.matches(onlyNumbersRegex)) {
+        else if(!salary.matches(onlyDoubleRegex)) {
             throw new UserMessageException("Salary must be a number");
         }
         else {
-            int salaryInt = Integer.parseInt(salary);
-            if(salaryInt < 0) {
+            Double salaryDouble = Double.parseDouble(salary);
+            if(salaryDouble < 0.0) {
                 throw new UserMessageException("Salary can't be a negative number");
             }
             else {
-                this.salary = salaryInt;
+                this.salary = salaryDouble;
             }
         }
     }
 
-    public int getSalary() {return salary;}
+    public Double getSalary() {return salary;}
 
     public boolean isoKButtonClicked() {
         return oKButtonClicked;
