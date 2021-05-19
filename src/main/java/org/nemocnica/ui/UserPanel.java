@@ -1,8 +1,13 @@
 package org.nemocnica.ui;
 
+import org.nemocnica.database.DatabaseOperations;
+import org.nemocnica.utils.AppProperties;
+import org.nemocnica.utils.UserMessageException;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.sql.Connection;
 
 //panel użytkownika
 //kontrolki dodawane "z ręki", aby pokazać,że tak też umiemy
@@ -18,7 +23,17 @@ public class UserPanel {
 
     private JTabbedPane tabbedPane;
 
+    //połaczenie do bazy danych, jedno wspólne dla wszystkich zakładek doktorzy/pacjenci i co tam dalej
+    private Connection connection;
     public UserPanel(MainFrame topLevelFrame) {
+        AppProperties appProperties = AppProperties.getInstance();
+        String databaseName = appProperties.getDatabasenamePath();
+        try {
+            this.connection = DatabaseOperations.connectToDatabase(databaseName);
+        } catch (UserMessageException e) {
+            JOptionPane.showMessageDialog(topLevelFrame, e.getMessage());
+        }
+
         this.topLevelFrame = topLevelFrame;
         this.panel = new JPanel();
         this.panel.setLayout(new GridLayout(1, 1)); //layout manager, dzięki temu kontrolki w środki się resizują
@@ -27,7 +42,7 @@ public class UserPanel {
 
         this.tabbedPane = new JTabbedPane();
 
-        JPanel doctorsPanel = new Doctors().getPanel();
+        JPanel doctorsPanel = new Doctors(connection).getPanel();
         tabbedPane.addTab("Lekarze", null, doctorsPanel,
                 "Edycja lekarzy");
 
