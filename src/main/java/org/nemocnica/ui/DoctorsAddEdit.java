@@ -3,6 +3,7 @@ package org.nemocnica.ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class DoctorsAddEdit extends JDialog {
     private JPanel contentPane;
@@ -56,13 +57,24 @@ public class DoctorsAddEdit extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private boolean isNameDataValid(String Name) {
+        String regex = "^[a-zA-Z]+$";
+        return Name.matches(regex);
+    }
+
     private void onOK() {
-        // add your code here
-        // pozbieraj dane z okienka, może jakaś validacja? coś nie może być puste?
         data.setFirstName(firstName.getText());
         data.setLastName(lastName.getText());
-        data.setoKButtonClicked(true);
-        dispose();
+        if(StringUtils.isEmpty(data.getFirstName())|StringUtils.isEmpty(data.getLastName())) {
+            JOptionPane.showMessageDialog(contentPane, "Data incomplete");
+        }
+        else if(!isNameDataValid(data.getFirstName())|!isNameDataValid(data.getLastName())) {
+            JOptionPane.showMessageDialog(contentPane, "Names can only contain letters");
+        }
+        else {
+            data.setoKButtonClicked(true);
+            dispose();
+        }
     }
 
     private void onCancel() {

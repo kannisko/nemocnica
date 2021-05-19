@@ -37,7 +37,12 @@
             <version>2.3.3</version>
             <scope>runtime</scope>
         </dependency>
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core &ndash;&gt;-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.sun.xml.bind</groupId>-->
 <!--            <artifactId>jaxb-core</artifactId>-->
