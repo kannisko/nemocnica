@@ -1,5 +1,6 @@
 package org.nemocnica.ui;
 
+import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
@@ -21,16 +22,33 @@ public class Doctors {
         this.connection = connection;
         addButton.addActionListener(e -> addNewDoctor());
         editButton.addActionListener(e -> editDoctor());
+        deleteButton.addActionListener(e -> deleteDoctor());
 
         try {
             refreshDoctorsTab();
         } catch (UserMessageException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    private void deleteDoctor(){
+        int selectedRow = doctorsTable.getSelectedRow();
+        if( selectedRow < 0){ //nic nie zaznaczone, może pusto?
+            return;
+        }
+        //id jest pierwszą kolumną, wartośc wyciagamy z modelu, zakładamy,że jset typu int
+        Object objectId = doctorsTable.getModel().getValueAt(selectedRow,0);
+
+        try {
+            DatabaseOperations.deleteFromTable(connection,"DOCTORS","DOCTOR_ID",objectId.toString());
+            refreshDoctorsTab();
+        } catch (UserMessageException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     private void addNewDoctor() {

@@ -90,6 +90,18 @@ public class DatabaseOperations {
         }
     }
 
+    public static void deleteFromTable(Connection connection, String tableName, String idName, String idValue) throws UserMessageException {
+        try(Statement stmt = connection.createStatement()){
+            String strStatement = "DELETE FROM " + tableName + " WHERE " + idName + "=" + idValue;
+            stmt.executeUpdate(strStatement);
+            connection.commit();
+        } catch (SQLException exception) {
+            logger.error("error while deletinf data", exception);
+            throw new UserMessageException(exception.getMessage());
+        }
+    }
+
+
     public static void main(String args[]) throws UserMessageException, SQLException {
         //wypisz co w tablicy doktorzy
         Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
