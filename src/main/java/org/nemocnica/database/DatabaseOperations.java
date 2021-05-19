@@ -91,12 +91,16 @@ public class DatabaseOperations {
     }
 
     public static void deleteFromTable(Connection connection, String tableName, String idName, String idValue) throws UserMessageException {
+        String strStatement = "DELETE FROM " + tableName + " WHERE " + idName + "=" + idValue;
+        executeStatement(connection,strStatement);
+    }
+
+    public static void executeStatement(Connection connection, String strStatement) throws UserMessageException {
         try(Statement stmt = connection.createStatement()){
-            String strStatement = "DELETE FROM " + tableName + " WHERE " + idName + "=" + idValue;
             stmt.executeUpdate(strStatement);
             connection.commit();
         } catch (SQLException exception) {
-            logger.error("error while deletinf data", exception);
+            logger.error("error while executing statement:\n"+strStatement, exception);
             throw new UserMessageException(exception.getMessage());
         }
     }

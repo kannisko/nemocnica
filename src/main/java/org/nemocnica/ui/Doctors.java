@@ -57,7 +57,14 @@ public class Doctors {
         DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
-            JOptionPane.showMessageDialog(null, "OK kliknięte - trzeba dodawać nowego");
+            //pobierz string dla inserta dla bazy i wykonaj
+            String insertString  = data.getInsertString();
+            try {
+                DatabaseOperations.executeStatement(connection,insertString);
+                refreshDoctorsTab();
+            } catch (UserMessageException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
     }
 
