@@ -89,17 +89,16 @@ public class Doctors {
                 }
             };
 
-    } catch(
-    SQLException exception)
+        } catch (SQLException exception) {
+            throw new UserMessageException(exception.getMessage());
+        }
 
-    {
-        throw new UserMessageException(exception.getMessage());
     }
-
-}
 
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         doctorsTable.setModel(tableModel);
+        // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
+        doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 }
