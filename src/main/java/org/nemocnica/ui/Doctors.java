@@ -6,6 +6,8 @@ import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.sql.*;
 import java.util.Arrays;
@@ -121,7 +123,7 @@ public class Doctors {
             //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
             //bezpieczniej niz po id
             String columnNames[] = new String[]{
-                    "id","Imię","Nazwisko","Specjalizacja","Stanowisko","Przełozony","id_departamentu","Departament"
+                    "id","Imię","Nazwisko","Specjalizacja","Stanowisko","Przełozony","id_departamentu","Departament","Płaca"
 
             };
             ResultSet rs = stmt.executeQuery(sql);
@@ -159,7 +161,15 @@ public class Doctors {
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         doctorsTable.setModel(tableModel);
-//        doctorsTable.getColumnModel().getColumn(5).set
+        //ukrycie kolumny departament_id
+        TableColumnModel tableColumnModel = doctorsTable.getColumnModel();
+        int departament_id_index = tableColumnModel.getColumnIndex("id_departamentu");
+        TableColumn tableColumn = tableColumnModel.getColumn(departament_id_index);
+        tableColumn.setMinWidth(0);
+        tableColumn.setMaxWidth(0);
+        tableColumn.setWidth(0);
+        tableColumn.setResizable(false);
+
         // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if( tableModel.getRowCount() >0) {
