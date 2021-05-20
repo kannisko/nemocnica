@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class Doctors {
@@ -117,14 +118,18 @@ public class Doctors {
             "FROM DOCTORS " +
             "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
 
+            //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
+            //bezpieczniej niz po id
+            String columnNames[] = new String[]{
+                    "id","Imię","Nazwisko","Specjalizacja","Stanowisko","Przełozony","id_departamentu","Departament"
+
+            };
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
 
-            Vector<String> columnNames = new Vector<>();
-            for (int col = 1; col <= columnCount; col++) {
-                columnNames.add(rsmd.getColumnName(col));
-            }
+            Vector<String> columnNamesVector = new Vector<>(Arrays.asList(columnNames));
+
             Vector<Vector<Object>> data = new Vector<>();
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
@@ -136,7 +141,7 @@ public class Doctors {
             }
 
             //tak zwana anonimowa klasa, nadpisuje niektóre metody
-            return new DefaultTableModel(data, columnNames) {
+            return new DefaultTableModel(data, columnNamesVector) {
 
                 // https://stackoverflow.com/questions/21350011/java-how-to-disable-the-jtable-editable-when-click-it
                 @Override
@@ -154,6 +159,7 @@ public class Doctors {
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         doctorsTable.setModel(tableModel);
+//        doctorsTable.getColumnModel().getColumn(5).set
         // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if( tableModel.getRowCount() >0) {
