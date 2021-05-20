@@ -30,6 +30,7 @@
                   <cellSelectionEnabled value="false"/>
                   <editingColumn value="1"/>
                   <enabled value="true"/>
+                  <preferredScrollableViewportSize width="1000" height="400"/>
                   <rowSelectionAllowed value="true"/>
                   <toolTipText value=""/>
                   <updateSelectionOnSort value="false"/>
