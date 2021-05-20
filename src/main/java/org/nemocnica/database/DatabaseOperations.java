@@ -1,11 +1,8 @@
 package org.nemocnica.database;
 
-import org.nemocnica.utils.AppProperties;
-import org.nemocnica.utils.Entry;
-import org.nemocnica.utils.XmlToObjects;
+import org.nemocnica.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.nemocnica.utils.UserMessageException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +11,7 @@ import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 
 public class DatabaseOperations {
@@ -104,6 +102,23 @@ public class DatabaseOperations {
             throw new UserMessageException(exception.getMessage());
         }
     }
+    public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, String table, String idColumn, String nameColumn){
+        String sql = String.format("SELECT %s, %s FROM %s ORDER BY %s ASC",idColumn,nameColumn,table,nameColumn);
+        Vector<ComboDictionaryItem> vector = new Vector<>();
+        vector.add(new ComboDictionaryItem(null,"<bez wyboru>"));
+        try( Statement stmt = connection.createStatement()){
+            ResultSet rs = stmt.executeQuery(sql);
+            while( rs.next()){
+                Integer id = rs.getInt(idColumn);
+                String name = rs.getString(nameColumn);
+                vector.add(new ComboDictionaryItem(id,name));
+            }
+        } catch (SQLException exception) {
+            logger.error("error while executing statement:\n"+sql, exception);
+        }
+        return vector;
+    }
+
 
 
     public static void main(String args[]) throws UserMessageException, SQLException {
@@ -131,4 +146,5 @@ public class DatabaseOperations {
         rs.close();
         connection.close();
     }
+
 }

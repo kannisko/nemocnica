@@ -58,7 +58,7 @@ public class Doctors {
     private void addNewDoctor() {
         //czyste dane, bo nowy
         DoctorDataClass data = new DoctorDataClass();
-        DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true);
+        DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true,connection);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
             //pobierz string dla inserta dla bazy i wykonaj
@@ -94,7 +94,7 @@ public class Doctors {
         } catch (UserMessageException exception) {
             throw new IllegalStateException("This should never happen, illegal values in database");
         }
-        DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false);
+        DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false,connection);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
             String updateString = data.getUpdateString();
