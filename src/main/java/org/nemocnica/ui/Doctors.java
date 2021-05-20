@@ -2,6 +2,7 @@ package org.nemocnica.ui;
 
 import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.AppProperties;
+import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
@@ -89,7 +90,7 @@ public class Doctors {
             data.setPosition(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Stanowisko")).toString());
             Object tmp = model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"));
             data.setChiefDoctorId(tmp != null ? tmp.toString() : null);
-            data.setDepartmentId((Integer)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id_departamentu")));
+            data.setDepartmentId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Departament"))).getId());
             data.setSalary(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Płaca")).toString());
         } catch (UserMessageException exception) {
             throw new IllegalStateException("This should never happen, illegal values in database");
@@ -119,7 +120,7 @@ public class Doctors {
             //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
             //bezpieczniej niz po id
             String columnNames[] = new String[]{
-                    "id", "Imię", "Nazwisko", "Specjalizacja", "Stanowisko", "Przełozony", "id_departamentu", "Departament", "Płaca"
+                    "id", "Imię", "Nazwisko", "Specjalizacja", "Stanowisko", "Przełozony",  "Departament", "Płaca"
 
             };
             ResultSet rs = stmt.executeQuery(sql);
@@ -131,10 +132,23 @@ public class Doctors {
             Vector<Vector<Object>> data = new Vector<>();
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
-                for (int col = 1; col <= columnCount; col++) {
-                    Object obj = rs.getObject(col);
-                    currentRow.add(obj);
-                }
+                //id
+                currentRow.add(rs.getInt(1));
+                //imię, nazwisko,specjalizacja, stanowisko
+                currentRow.add(rs.getString(2));
+                currentRow.add(rs.getString(3));
+                currentRow.add(rs.getString(4));
+                currentRow.add(rs.getString(5));
+
+                //pzrełozony
+                currentRow.add(rs.getInt(6));
+                //departament
+                int deptId = rs.getInt(7);
+                String deptName = rs.getString(8);
+                currentRow.add(new ComboDictionaryItem(deptId,deptName));
+                //salary
+                currentRow.add(rs.getObject(9));
+
                 data.add(currentRow);
             }
 
@@ -157,15 +171,6 @@ public class Doctors {
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         doctorsTable.setModel(tableModel);
-        //ukrycie kolumny departament_id
-        TableColumnModel tableColumnModel = doctorsTable.getColumnModel();
-        int departament_id_index = tableColumnModel.getColumnIndex("id_departamentu");
-        TableColumn tableColumn = tableColumnModel.getColumn(departament_id_index);
-        tableColumn.setMinWidth(0);
-        tableColumn.setMaxWidth(0);
-        tableColumn.setWidth(0);
-        tableColumn.setResizable(false);
-
         // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (tableModel.getRowCount() > 0) {
