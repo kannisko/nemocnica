@@ -39,16 +39,16 @@ public class Doctors {
         return panel;
     }
 
-    private void deleteDoctor(){
+    private void deleteDoctor() {
         int selectedRow = doctorsTable.getSelectedRow();
-        if( selectedRow < 0){ //nic nie zaznaczone, może pusto?
+        if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
             return;
         }
         //id jest pierwszą kolumną, wartośc wyciagamy z modelu, zakładamy,że jset typu int
-        Object objectId = doctorsTable.getModel().getValueAt(selectedRow,0);
+        Object objectId = doctorsTable.getModel().getValueAt(selectedRow, 0);
 
         try {
-            DatabaseOperations.deleteFromTable(connection,"DOCTORS","DOCTOR_ID",objectId.toString());
+            DatabaseOperations.deleteFromTable(connection, "DOCTORS", "DOCTOR_ID", objectId.toString());
             refreshDoctorsTab();
         } catch (UserMessageException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -62,9 +62,9 @@ public class Doctors {
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
             //pobierz string dla inserta dla bazy i wykonaj
-            String insertString  = data.getInsertString();
+            String insertString = data.getInsertString();
             try {
-                DatabaseOperations.executeStatement(connection,insertString);
+                DatabaseOperations.executeStatement(connection, insertString);
                 refreshDoctorsTab();
             } catch (UserMessageException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
@@ -74,28 +74,24 @@ public class Doctors {
 
     private void editDoctor() {
         int selectedRow = doctorsTable.getSelectedRow();
-        if( selectedRow < 0){ //nic nie zaznaczone, może pusto?
+        if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
             return;
         }
         TableModel model = doctorsTable.getModel();
         //dane tego co wybrane w tabeli
         DoctorDataClass data = new DoctorDataClass();
         try {
-            data.setId((int) model.getValueAt(selectedRow, 0));
-            data.setFirstName(model.getValueAt(selectedRow, 1).toString());
-            data.setLastName(model.getValueAt(selectedRow, 2).toString());
-            data.setSpecialization(model.getValueAt(selectedRow, 3).toString());
-            data.setPosition(model.getValueAt(selectedRow, 4).toString());
-            if(model.getValueAt(selectedRow, 5) == null) {
-                data.setChiefDoctorId(null);
-            }
-            else {
-                data.setChiefDoctorId(model.getValueAt(selectedRow, 5).toString());
-            }
-            data.setDepartmentId(model.getValueAt(selectedRow, 6).toString());
-            data.setSalary(model.getValueAt(selectedRow, 7).toString());
-        }
-        catch (UserMessageException exception) {
+            TableColumnModel tableColumnModel = doctorsTable.getColumnModel();
+            data.setId((int) model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id")));
+            data.setFirstName(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Imię")).toString());
+            data.setLastName(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Nazwisko")).toString());
+            data.setSpecialization(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Specjalizacja")).toString());
+            data.setPosition(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Stanowisko")).toString());
+            Object tmp = model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"));
+            data.setChiefDoctorId(tmp != null ? tmp.toString() : null);
+            data.setDepartmentId(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id_departamentu")).toString());
+            data.setSalary(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Płaca")).toString());
+        } catch (UserMessageException exception) {
             throw new IllegalStateException("This should never happen, illegal values in database");
         }
         DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false);
@@ -103,7 +99,7 @@ public class Doctors {
         if (data.isoKButtonClicked()) {
             String updateString = data.getUpdateString();
             try {
-                DatabaseOperations.executeStatement(connection,updateString);
+                DatabaseOperations.executeStatement(connection, updateString);
                 refreshDoctorsTab();
             } catch (UserMessageException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
@@ -114,16 +110,16 @@ public class Doctors {
     TableModel getTableModel() throws UserMessageException {
         //try-with-resources - zamknie statement nawet jak wyjatek czy cos takiego
         //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try (Statement stmt = connection.createStatement() ){
+        try (Statement stmt = connection.createStatement()) {
             String sql =
-            "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary "+
-            "FROM DOCTORS " +
-            "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
+                    "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary " +
+                            "FROM DOCTORS " +
+                            "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
 
             //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
             //bezpieczniej niz po id
             String columnNames[] = new String[]{
-                    "id","Imię","Nazwisko","Specjalizacja","Stanowisko","Przełozony","id_departamentu","Departament","Płaca"
+                    "id", "Imię", "Nazwisko", "Specjalizacja", "Stanowisko", "Przełozony", "id_departamentu", "Departament", "Płaca"
 
             };
             ResultSet rs = stmt.executeQuery(sql);
@@ -172,7 +168,7 @@ public class Doctors {
 
         // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        if( tableModel.getRowCount() >0) {
+        if (tableModel.getRowCount() > 0) {
             doctorsTable.setRowSelectionInterval(0, 0);
         }
     }
