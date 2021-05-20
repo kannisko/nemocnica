@@ -15,14 +15,17 @@ public class MainFrame extends JFrame{
         contentPane.add(newPanel);
         pack();
         setResizable(resizable);
+        setLocationRelativeTo(null);
     }
 
     public void setAdminPanel(){
         setNewContent(new AdminPanel(this).getPanel(),false);
     }
+
     public void setUserAdminChooser(){
         setNewContent(new AdminUserChooser(this).getPanel(),false);
     }
+
     public void setUserPanel(){
         setNewContent( new UserPanel(this).getPanel(),true);
     }
