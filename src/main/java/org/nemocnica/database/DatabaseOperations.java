@@ -110,7 +110,12 @@ public class DatabaseOperations {
         //wypisz co w tablicy doktorzy
         Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
         Statement stmt = connection.createStatement();
-        String sql = "SELECT * FROM DEPARTMENTS";
+        String sql = "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary "+
+                "FROM DOCTORS " +
+                "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
+
+
+
         ResultSet rs = stmt.executeQuery(sql);
         ResultSetMetaData rsmd = rs.getMetaData();
         int columnCount = rsmd.getColumnCount();

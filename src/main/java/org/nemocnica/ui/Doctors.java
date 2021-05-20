@@ -112,7 +112,11 @@ public class Doctors {
         //try-with-resources - zamknie statement nawet jak wyjatek czy cos takiego
         //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
         try (Statement stmt = connection.createStatement() ){
-            String sql = "SELECT * FROM DOCTORS";
+            String sql =
+            "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary "+
+            "FROM DOCTORS " +
+            "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
+
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
