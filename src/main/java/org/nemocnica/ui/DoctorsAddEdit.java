@@ -1,12 +1,10 @@
 package org.nemocnica.ui;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.util.Vector;
 
-import org.apache.commons.lang3.StringUtils;
 import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
@@ -20,9 +18,8 @@ public class DoctorsAddEdit extends JDialog {
     private JTextField specialization;
     private JTextField position;
     private JTextField chiefDoctorId;
-//    private JTextField departmentId;
     private JTextField salary;
-    private JComboBox depertament;
+    private JComboBox depertamentCombo;
     private DoctorDataClass data;
     boolean add; //dodajemy nowego czy edytujemy?
     public DoctorsAddEdit(String title, DoctorDataClass data, boolean add, Connection connection) {
@@ -48,8 +45,7 @@ public class DoctorsAddEdit extends JDialog {
             else {
                 chiefDoctorId.setText(data.getChiefDoctorId().toString());
             }
-            depertament.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
-//            departmentId.setText(data.getDepartmentId().toString());
+            depertamentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
             salary.setText(data.getSalary().toString());
         }
 
@@ -93,7 +89,8 @@ public class DoctorsAddEdit extends JDialog {
             data.setSpecialization(specialization.getText());
             data.setPosition(position.getText());
             data.setChiefDoctorId(chiefDoctorId.getText());
-//            data.setDepartmentId(departmentId.getText());
+
+            data.setDepartmentId(((ComboDictionaryItem)depertamentCombo.getSelectedItem()).getId());
             data.setSalary(salary.getText());
 
             data.setoKButtonClicked(true);
@@ -113,7 +110,7 @@ public class DoctorsAddEdit extends JDialog {
     private void fillDepartamentsComboBox(Connection connection){
         Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DEPARTMENTS", "department_id", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
-        depertament.setModel(model);
+        depertamentCombo.setModel(model);
     }
 
 

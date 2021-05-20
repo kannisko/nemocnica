@@ -30,16 +30,13 @@ public class DoctorDataClass {
     }
 
     public void setFirstName(String firstName) throws UserMessageException {
-        if(StringUtils.isEmpty(firstName)) {
+        if (StringUtils.isEmpty(firstName)) {
             throw new UserMessageException("First name data incomplete");
-        }
-        else if(!firstName.matches(onlyLettersRegex)) {
+        } else if (!firstName.matches(onlyLettersRegex)) {
             throw new UserMessageException("First name can only contain letters");
-        }
-        else if(!firstName.matches(capitalFirstLetterRegex)) {
+        } else if (!firstName.matches(capitalFirstLetterRegex)) {
             throw new UserMessageException("First letter of first name should be uppercase");
-        }
-        else {
+        } else {
             this.firstName = firstName;
         }
     }
@@ -49,16 +46,13 @@ public class DoctorDataClass {
     }
 
     public void setLastName(String lastName) throws UserMessageException {
-        if(StringUtils.isEmpty(lastName)) {
+        if (StringUtils.isEmpty(lastName)) {
             throw new UserMessageException("Last name data incomplete");
-        }
-        else if(!lastName.matches(onlyLettersRegex)) {
+        } else if (!lastName.matches(onlyLettersRegex)) {
             throw new UserMessageException("Last name can only contain letters");
-        }
-        else if(!lastName.matches(capitalFirstLetterRegex)) {
+        } else if (!lastName.matches(capitalFirstLetterRegex)) {
             throw new UserMessageException("First letter of last name should be uppercase");
-        }
-        else {
+        } else {
             this.lastName = lastName;
         }
     }
@@ -68,86 +62,77 @@ public class DoctorDataClass {
     }
 
     public void setSpecialization(String specialization) throws UserMessageException {
-        if(StringUtils.isEmpty(specialization)) {
+        if (StringUtils.isEmpty(specialization)) {
             throw new UserMessageException("Specialization data incomplete");
-        }
-        else {
+        } else {
             this.specialization = specialization;
         }
     }
 
-    public String getSpecialization() { return specialization;}
+    public String getSpecialization() {
+        return specialization;
+    }
 
     public void setPosition(String position) throws UserMessageException {
-        if(StringUtils.isEmpty(position)) {
+        if (StringUtils.isEmpty(position)) {
             throw new UserMessageException("Position data incomplete");
-        }
-        else {
+        } else {
             this.position = position;
         }
     }
 
-    public String getPosition() {return position;}
+    public String getPosition() {
+        return position;
+    }
 
     public void setChiefDoctorId(String chiefDoctorId) throws UserMessageException {
-        if(StringUtils.isEmpty(chiefDoctorId)) {
+        if (StringUtils.isEmpty(chiefDoctorId)) {
             this.chiefDoctorId = null;
-        }
-        else if(!chiefDoctorId.matches(onlyNumbersRegex)) {
+        } else if (!chiefDoctorId.matches(onlyNumbersRegex)) {
             throw new UserMessageException("Chief doctor Id must be a number");
-        }
-        else {
+        } else {
             int chiefDoctorIdInt = Integer.parseInt(chiefDoctorId);
-            if(chiefDoctorIdInt < 0) {
+            if (chiefDoctorIdInt < 0) {
                 throw new UserMessageException("Chief doctor Id can't be a negative number");
-            }
-            else {
+            } else {
                 this.chiefDoctorId = chiefDoctorIdInt;
             }
         }
     }
 
-    public Integer getChiefDoctorId() {return chiefDoctorId;}
-
-    public void setDepartmentId(String departmentId) throws UserMessageException {
-        if(StringUtils.isEmpty(departmentId)) {
-            throw new UserMessageException("Department Id data incomplete");
-        }
-        else if(!departmentId.matches(onlyNumbersRegex)) {
-            throw new UserMessageException("Department Id must be a number");
-        }
-        else {
-            int departmentIdInt = Integer.parseInt(departmentId);
-            if(departmentIdInt < 0) {
-                throw new UserMessageException("Department Id can't be a negative number");
-            }
-            else {
-                this.departmentId = departmentIdInt;
-            }
-        }
+    public Integer getChiefDoctorId() {
+        return chiefDoctorId;
     }
 
-    public Integer getDepartmentId() {return departmentId;}
+    public void setDepartmentId(Integer departmentId) throws UserMessageException {
+        if (departmentId == null || departmentId < 0) {
+            throw new UserMessageException("Department Id can't be a null or negative number");
+        }
+        this.departmentId = departmentId;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
 
     public void setSalary(String salary) throws UserMessageException {
-        if(StringUtils.isEmpty(salary)) {
+        if (StringUtils.isEmpty(salary)) {
             this.salary = 0.0;
-        }
-        else if(!salary.matches(onlyDoubleRegex)) {
+        } else if (!salary.matches(onlyDoubleRegex)) {
             throw new UserMessageException("Salary must be a number");
-        }
-        else {
+        } else {
             Double salaryDouble = Double.parseDouble(salary);
-            if(salaryDouble < 0.0) {
+            if (salaryDouble < 0.0) {
                 throw new UserMessageException("Salary can't be a negative number");
-            }
-            else {
+            } else {
                 this.salary = salaryDouble;
             }
         }
     }
 
-    public Double getSalary() {return salary;}
+    public Double getSalary() {
+        return salary;
+    }
 
     public boolean isoKButtonClicked() {
         return oKButtonClicked;
@@ -157,11 +142,11 @@ public class DoctorDataClass {
         this.oKButtonClicked = oKButtonClicked;
     }
 
-    public String getInsertString(){
+    public String getInsertString() {
         String insert = "INSERT INTO DOCTORS (name,surname,med_specialisation,position,chief_doctor_id,department_id,salary) VALUES (";
         insert += "'" + getFirstName() + "',"; //name
-        insert += "'" + getLastName() +"',"; //surname
-        insert += "'" + getSpecialization() +"',";  //med_specialisation not null - daje na rympał - potem z danych kopiować
+        insert += "'" + getLastName() + "',"; //surname
+        insert += "'" + getSpecialization() + "',";  //med_specialisation not null - daje na rympał - potem z danych kopiować
         insert += "'" + getPosition() + "',";  // position not null - daje na rympał, potem z danych brać
         insert += getChiefDoctorId() + ","; //chief_doctor_id może byc null - potem cos wymyslę
         insert += getDepartmentId() + ","; //department_id potem jakies powiązanie
@@ -170,11 +155,12 @@ public class DoctorDataClass {
         return insert;
     }
 
-    public String getUpdateString(){
+    public String getUpdateString() {
         String update = "UPDATE DOCTORS SET ";
         update += "name='" + getFirstName() + "',";
-        update += "surname='" + getLastName() + "'";
-        //reszta wartości jak bedzie mozna edytować
+        update += "surname='" + getLastName() + "',";
+        update += "department_id=" + getDepartmentId();
+
 
         update += " WHERE doctor_id=" + getId();
         return update;

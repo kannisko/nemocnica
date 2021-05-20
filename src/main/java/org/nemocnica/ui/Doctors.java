@@ -89,7 +89,7 @@ public class Doctors {
             data.setPosition(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Stanowisko")).toString());
             Object tmp = model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"));
             data.setChiefDoctorId(tmp != null ? tmp.toString() : null);
-            data.setDepartmentId(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id_departamentu")).toString());
+            data.setDepartmentId((Integer)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id_departamentu")));
             data.setSalary(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Płaca")).toString());
         } catch (UserMessageException exception) {
             throw new IllegalStateException("This should never happen, illegal values in database");
