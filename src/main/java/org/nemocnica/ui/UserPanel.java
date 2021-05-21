@@ -51,8 +51,8 @@ public class UserPanel {
         tabbedPane.addTab("Departmenty", null, departmentsPanel,
                 "");
 
-        JComponent panel3 = makeTextPanel("Panel #3");
-        tabbedPane.addTab("Tab 3", null, panel3,
+        JComponent patientsPanel = new Patients(connection).getPanel();
+        tabbedPane.addTab("Pacjenci", null, patientsPanel,
                 "Still does nothing");
 
         JComponent panel4 = makeTextPanel(

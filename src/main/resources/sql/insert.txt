@@ -18,3 +18,5 @@ INSERT INTO DEPARTMENTS (department_id,name) VALUES(5,'Chirurgia')
 INSERT INTO DEPARTMENTS (department_id,name) VALUES(6,'Kardiologia')
 INSERT INTO DEPARTMENTS (department_id,name) VALUES(7,'Urologia')
 INSERT INTO DEPARTMENTS (department_id,name) VALUES(8,'Ginekologia')
+
+
