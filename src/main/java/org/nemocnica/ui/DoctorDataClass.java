@@ -13,10 +13,10 @@ public class DoctorDataClass {
     private Integer departmentId;
     private Double salary;
 
-    private String onlyLettersRegex = "^[a-zA-Z]+$";
-    private String capitalFirstLetterRegex = "[A-Z]\\S+";
-    private String onlyNumbersRegex = "^[0-9]+$";
-    private String onlyDoubleRegex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
+    private static final String onlyLettersRegex = "^[a-zA-Z]+$";
+    private static final String capitalFirstLetterRegex = "[A-Z]\\S+";
+    //private static final String onlyNumbersRegex = "^[0-9]+$";
+    private static final String onlyDoubleRegex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
 
     private boolean oKButtonClicked;
 
@@ -109,7 +109,7 @@ public class DoctorDataClass {
         } else if (!salary.matches(onlyDoubleRegex)) {
             throw new UserMessageException("Salary must be a number");
         } else {
-            Double salaryDouble = Double.parseDouble(salary);
+            double salaryDouble = Double.parseDouble(salary);
             if (salaryDouble < 0.0) {
                 throw new UserMessageException("Salary can't be a negative number");
             } else {
@@ -153,14 +153,5 @@ public class DoctorDataClass {
 
         update += " WHERE doctor_id=" + getId();
         return update;
-    }
-    public static void main(String args[]){
-        //jak to z tym nulem i toString jest;
-        Integer i=null;
-        String s = "xxx:"+i;
-        System.out.println(s);
-
-        s = "yyy:" + i.toString();
-        System.out.println(s);
     }
 }

@@ -7,8 +7,8 @@ public class DepartmentDataClass {
     private int id;
     private String departmentName;
 
-    private String onlyLettersRegex = "^[a-zA-Z]+$";
-    private String capitalFirstLetterRegex = "[A-Z]\\S+";
+    private static final String onlyLettersRegex = "^[a-zA-Z]+$";
+    private static final String capitalFirstLetterRegex = "[A-Z]\\S+";
 
     private boolean oKButtonClicked;
 

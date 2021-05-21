@@ -5,7 +5,6 @@ import org.nemocnica.utils.AppProperties;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.sql.Connection;
 
