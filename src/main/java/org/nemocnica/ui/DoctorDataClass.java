@@ -155,4 +155,13 @@ public class DoctorDataClass {
         update += " WHERE doctor_id=" + getId();
         return update;
     }
+    public static void main(String args[]){
+        //jak to z tym nulem i toString jest;
+        Integer i=null;
+        String s = "xxx:"+i;
+        System.out.println(s);
+
+        s = "yyy:" + i.toString();
+        System.out.println(s);
+    }
 }
