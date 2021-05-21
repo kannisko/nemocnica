@@ -46,7 +46,7 @@ public class Departments {
                         "SELECT DEPARTMENTS.department_id, DEPARTMENTS.name " +
                                 "FROM departments ";
 
-                String columnNames[] = new String[]{
+                String[] columnNames = new String[]{
                         "id", "Nazwa"
 
                 };

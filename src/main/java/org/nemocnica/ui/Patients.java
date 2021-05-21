@@ -13,9 +13,9 @@ import java.util.Vector;
 public class Patients {
     private JPanel panel;
     private JTable patientsTable;
+    private JButton editButton;
     private JButton addButton;
     private JButton deleteButton;
-    private JButton editButton;
 
     Connection connection;
 
@@ -37,12 +37,12 @@ public class Patients {
 
         try (Statement stmt = connection.createStatement()) {
             String sql =
-                    "SELECT PATIENTS.patient_id, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id" +
-                            "FROM PATIENTS" +
-                            "JOIN DEPARTMENTS ON PATIENTS.department_id = DEPARTMENTS.department_id" +
-                    "JOIN DOCTORS ON PATIENTS.main_doctor_id = DOCTORS.doctor_id";
+                    "SELECT PATIENTS.patient_id, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id " +
+                            "FROM PATIENTS " +
+                            "LEFT JOIN DEPARTMENTS ON PATIENTS.department_id = DEPARTMENTS.department_id " +
+                    "LEFT JOIN DOCTORS ON PATIENTS.main_doctor_id = DOCTORS.doctor_id ";
 
-            String columnNames[] = new String[]{
+            String[] columnNames = new String[]{
                     "id", "Doktor prowadzący", "Nazwa oddziału"
 
             };
@@ -51,7 +51,6 @@ public class Patients {
             int columnCount = rsmd.getColumnCount();
 
             Vector<String> columnNamesVector = new Vector<>(Arrays.asList(columnNames));
-
             Vector<Vector<Object>> data = new Vector<>();
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
@@ -66,7 +65,6 @@ public class Patients {
                 }
                 currentRow.add(new ComboDictionaryItem(main_doctor_id,main_doctor_surname));
                 currentRow.add(rs.getInt(5));
-
                 data.add(currentRow);
             }
 

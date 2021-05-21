@@ -52,8 +52,10 @@ public class UserPanel {
                 "");
 
         JComponent patientsPanel = new Patients(connection).getPanel();
+
+
         tabbedPane.addTab("Pacjenci", null, patientsPanel,
-                "Still does nothing");
+                "");
 
         JComponent panel4 = makeTextPanel(
                 "Panel #4 (has a preferred size of 410 x 50).");
