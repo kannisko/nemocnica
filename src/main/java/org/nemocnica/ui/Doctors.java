@@ -59,7 +59,7 @@ public class Doctors {
     private void addNewDoctor() {
         //czyste dane, bo nowy
         DoctorDataClass data = new DoctorDataClass();
-        DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true,connection);
+        DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true, connection);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
             //pobierz string dla inserta dla bazy i wykonaj
@@ -91,10 +91,10 @@ public class Doctors {
             data.setChiefDoctorId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"))).getId());
             data.setDepartmentId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Departament"))).getId());
             data.setSalary(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Płaca")).toString());
-        } catch (UserMessageException exception) {
+        } catch (UserMessageException e) {
             throw new IllegalStateException("This should never happen, illegal values in database");
         }
-        DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false,connection);
+        DoctorsAddEdit box = new DoctorsAddEdit("Edytuj dane lekarza", data, false, connection);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
             String updateString = data.getUpdateString();

@@ -81,7 +81,7 @@ public class Patients {
 
     }
 
-    private void refreshPatientsTab () throws UserMessageException {
+    private void refreshPatientsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         patientsTable.setModel(tableModel);
         patientsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

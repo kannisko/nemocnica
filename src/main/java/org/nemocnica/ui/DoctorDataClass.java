@@ -134,11 +134,11 @@ public class DoctorDataClass {
         String insert = "INSERT INTO DOCTORS (name,surname,med_specialisation,position,chief_doctor_id,department_id,salary) VALUES (";
         insert += "'" + getFirstName() + "',"; //name
         insert += "'" + getLastName() + "',"; //surname
-        insert += "'" + getSpecialization() + "',";  //med_specialisation not null - daje na rympał - potem z danych kopiować
-        insert += "'" + getPosition() + "',";  // position not null - daje na rympał, potem z danych brać
-        insert += getChiefDoctorId() + ","; //chief_doctor_id może byc null - potem cos wymyslę
-        insert += getDepartmentId() + ","; //department_id potem jakies powiązanie
-        insert += getSalary(); //salary NOT NULL na razie na rympał
+        insert += "'" + getSpecialization() + "',";  //med_specialisation not null
+        insert += "'" + getPosition() + "',";  // position not null
+        insert += getChiefDoctorId() + ","; //chief_doctor_id może byc null
+        insert += getDepartmentId() + ","; //department_id
+        insert += getSalary(); //salary NOT NULL
         insert += ")";
         return insert;
     }

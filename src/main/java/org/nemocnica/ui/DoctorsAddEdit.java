@@ -35,7 +35,7 @@ public class DoctorsAddEdit extends JDialog {
         fillDepartamentsComboBox(connection);
         fillChiefDoctorCombo(connection);
 
-        if( !this.add){
+        if(!this.add){
             firstName.setText(data.getFirstName());
             lastName.setText(data.getLastName());
             specialization.setText(data.getSpecialization());
@@ -73,11 +73,6 @@ public class DoctorsAddEdit extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private boolean isNameDataValid(String Name) {
-        String regex = "^[a-zA-Z]+$";
-        return Name.matches(regex);
-    }
-
     private void onOK() {
         try {
             data.setFirstName(firstName.getText());
@@ -98,7 +93,6 @@ public class DoctorsAddEdit extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         data.setoKButtonClicked(false);
         dispose();
     }

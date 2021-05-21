@@ -48,7 +48,7 @@ public class UserPanel {
 
 
         JComponent departmentsPanel = new Departments(connection).getPanel();
-        tabbedPane.addTab("Departmenty", null, departmentsPanel,
+        tabbedPane.addTab("Departamenty", null, departmentsPanel,
                 "");
 
         JComponent patientsPanel = new Patients(connection).getPanel();
@@ -64,7 +64,7 @@ public class UserPanel {
                 "Does nothing at all");
 
 
-        //aby nie tracić miejsca na ekranie dodajemu button do powrotu do głownego panelu do paska z zakładkami
+        //aby nie tracić miejsca na ekranie dodajemy button do powrotu do głownego panelu do paska z zakładkami
         //ściagniete z http://www.java2s.com/Tutorial/Java/0240__Swing/AddButtontotabbar.htm
         //pustu panel, nigdy  nie będzie widoczy, button na zakładce bedzie wracał do głownego panelu
         tabbedPane.addTab("", null, new JPanel(),

@@ -22,11 +22,11 @@ public class DepartmentDataClass {
 
     public void setDepartmentName(String departmentName) throws UserMessageException {
         if (StringUtils.isEmpty(departmentName)) {
-            throw new UserMessageException("First name data incomplete");
+            throw new UserMessageException("Department name data incomplete");
         } else if (!departmentName.matches(onlyLettersRegex)) {
-            throw new UserMessageException("First name can only contain letters");
+            throw new UserMessageException("Department name can only contain letters");
         } else if (!departmentName.matches(capitalFirstLetterRegex)) {
-            throw new UserMessageException("First letter of first name should be uppercase");
+            throw new UserMessageException("First letter of Department name should be uppercase");
         } else {
             this.departmentName = departmentName;
         }
@@ -43,17 +43,17 @@ public class DepartmentDataClass {
     }
 
     public String getInsertString() {
-        String insert = "INSERT INTO DEPARTMENTS (name) VALUES VALUES (";
-        insert += "'" + getDepartmentName() + "',"; //name
+        String insert = "INSERT INTO DEPARTMENTS (name) VALUES (";
+        insert += "'" + getDepartmentName() + "'"; //name
         insert += ")";
         return insert;
     }
 
     public String getUpdateString() {
         String update = "UPDATE DEPARTMENTS SET ";
-        update += "name='" + getDepartmentName() + "',";
+        update += "name='" + getDepartmentName() + "'";
 
-        update += " WHERE doctor_id=" + getId();
+        update += " WHERE department_id=" + getId();
         return update;
     }
 }
