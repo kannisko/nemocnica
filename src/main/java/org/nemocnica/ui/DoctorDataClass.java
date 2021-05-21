@@ -3,7 +3,6 @@ package org.nemocnica.ui;
 import org.apache.commons.lang3.StringUtils;
 import org.nemocnica.utils.UserMessageException;
 
-//w sumie to co w bazie, dodać resztę kolumn w ramach potrzeb
 public class DoctorDataClass {
     private int id;
     private String firstName;

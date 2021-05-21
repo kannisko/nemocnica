@@ -62,7 +62,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Name:"/>
+              <text value="Imię:"/>
             </properties>
           </component>
           <component id="b1010" class="javax.swing.JTextField" binding="firstName">
@@ -80,7 +80,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Last Name:"/>
+              <text value="Nazwisko:"/>
             </properties>
           </component>
           <component id="1ce78" class="javax.swing.JTextField" binding="lastName">
@@ -108,7 +108,7 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Specialization:"/>
+              <text value="Specjalizacja:"/>
             </properties>
           </component>
           <component id="3dd3b" class="javax.swing.JTextField" binding="position">
@@ -126,7 +126,7 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Position:"/>
+              <text value="Pozycja:"/>
             </properties>
           </component>
           <component id="88ce1" class="javax.swing.JLabel">
@@ -134,7 +134,7 @@
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Chief Doctor:"/>
+              <text value="Główny lekarz:"/>
             </properties>
           </component>
           <component id="4e177" class="javax.swing.JLabel">
@@ -142,7 +142,7 @@
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Department Id:"/>
+              <text value=" Departament:"/>
             </properties>
           </component>
           <component id="8301c" class="javax.swing.JTextField" binding="salary">
@@ -160,7 +160,7 @@
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Salary:"/>
+              <text value="Płaca:"/>
             </properties>
           </component>
           <component id="b103d" class="javax.swing.JComboBox" binding="depertamentCombo">
