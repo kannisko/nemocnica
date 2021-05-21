@@ -47,9 +47,9 @@ public class UserPanel {
                 "Edycja lekarzy");
 
 
-        JComponent panel2 = makeTextPanel("Panel #2");
-        tabbedPane.addTab("Tab 2", null, panel2,
-                "Does twice as much nothing");
+        JComponent departmentsPanel = new Departments(connection).getPanel();
+        tabbedPane.addTab("Departmenty", null, departmentsPanel,
+                "");
 
         JComponent panel3 = makeTextPanel("Panel #3");
         tabbedPane.addTab("Tab 3", null, panel3,
