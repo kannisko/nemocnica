@@ -113,10 +113,10 @@ public class Doctors {
         //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
         try (Statement stmt = connection.createStatement()) {
             String sql =
-                    "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary " +
+                    "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+
                             "FROM DOCTORS " +
-                            "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
-
+                            "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id "+
+                            "LEFT JOIN DOCTORS AS DOC2 ON DOCTORS.chief_doctor_id = DOC2.doctor_id";
             //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
             //bezpieczniej niz po id
             String columnNames[] = new String[]{
@@ -140,8 +140,18 @@ public class Doctors {
                 currentRow.add(rs.getString(4));
                 currentRow.add(rs.getString(5));
 
-                //pzrełozony
-                currentRow.add(rs.getInt(6));
+                //przełozony
+                Integer chief_doctor_id = rs.getInt(6);
+                //imię i nazwisko przełozonego i kleimy, iżby pięknie buło
+                String chief_name = rs.getString(10);
+                String chief_surname = rs.getString(11);
+                if( chief_surname != null){
+                    //imie i nazwisko not null, chyba że nie ma przełozonego
+                    chief_surname += " " + chief_name;
+                }
+                currentRow.add(new ComboDictionaryItem(chief_doctor_id,chief_surname));
+
+
                 //departament
                 int deptId = rs.getInt(7);
                 String deptName = rs.getString(8);

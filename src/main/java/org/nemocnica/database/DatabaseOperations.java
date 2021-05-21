@@ -125,9 +125,10 @@ public class DatabaseOperations {
         //wypisz co w tablicy doktorzy
         Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
         Statement stmt = connection.createStatement();
-        String sql = "SELECT doctor_id,DOCTORS.name,surname,med_specialisation,position,chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,salary "+
+        String sql = "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+
                 "FROM DOCTORS " +
-                "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id";
+                "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id "+
+                "LEFT JOIN DOCTORS AS DOC2 ON DOCTORS.chief_doctor_id = DOC2.doctor_id";
 
 
 
