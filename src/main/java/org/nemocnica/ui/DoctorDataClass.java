@@ -85,19 +85,8 @@ public class DoctorDataClass {
         return position;
     }
 
-    public void setChiefDoctorId(String chiefDoctorId) throws UserMessageException {
-        if (StringUtils.isEmpty(chiefDoctorId)) {
-            this.chiefDoctorId = null;
-        } else if (!chiefDoctorId.matches(onlyNumbersRegex)) {
-            throw new UserMessageException("Chief doctor Id must be a number");
-        } else {
-            int chiefDoctorIdInt = Integer.parseInt(chiefDoctorId);
-            if (chiefDoctorIdInt < 0) {
-                throw new UserMessageException("Chief doctor Id can't be a negative number");
-            } else {
-                this.chiefDoctorId = chiefDoctorIdInt;
-            }
-        }
+    public void setChiefDoctorId(Integer chiefDoctorId) throws UserMessageException {
+        this.chiefDoctorId = chiefDoctorId;
     }
 
     public Integer getChiefDoctorId() {
@@ -159,6 +148,7 @@ public class DoctorDataClass {
         String update = "UPDATE DOCTORS SET ";
         update += "name='" + getFirstName() + "',";
         update += "surname='" + getLastName() + "',";
+        update += "chief_doctor_id="+getChiefDoctorId() + ",";
         update += "department_id=" + getDepartmentId();
 
 

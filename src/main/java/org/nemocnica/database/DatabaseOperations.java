@@ -102,15 +102,30 @@ public class DatabaseOperations {
             throw new UserMessageException(exception.getMessage());
         }
     }
-    public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, String table, String idColumn, String nameColumn){
-        String sql = String.format("SELECT %s, %s FROM %s ORDER BY %s ASC",idColumn,nameColumn,table,nameColumn);
+    public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, String table, String idColumn, String ... nameColumns){
+        //sklej nazwy kolumn, daj przecinki pomiedzy, ale nie przed pierwsza i nie po ostatniej
+        String columns = "";
+        for( int i=0; i< nameColumns.length; i++){
+            if( i != 0) {
+                columns += ",";
+            }
+            columns += nameColumns[i];
+        }
+        String sql = String.format("SELECT %s, %s FROM %s ORDER BY %s ASC",idColumn,columns,table,columns);
         Vector<ComboDictionaryItem> vector = new Vector<>();
         vector.add(new ComboDictionaryItem(null,"<bez wyboru>"));
         try( Statement stmt = connection.createStatement()){
             ResultSet rs = stmt.executeQuery(sql);
             while( rs.next()){
                 Integer id = rs.getInt(idColumn);
-                String name = rs.getString(nameColumn);
+                String name = "";
+                for( int i=0; i< nameColumns.length; i++){
+                    if( i != 0) {
+                        name += " ";
+                    }
+                    ;
+                    name += rs.getString(nameColumns[i]);
+                }
                 vector.add(new ComboDictionaryItem(id,name));
             }
         } catch (SQLException exception) {

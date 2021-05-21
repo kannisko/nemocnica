@@ -88,8 +88,7 @@ public class Doctors {
             data.setLastName(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Nazwisko")).toString());
             data.setSpecialization(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Specjalizacja")).toString());
             data.setPosition(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Stanowisko")).toString());
-            Object tmp = model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"));
-            data.setChiefDoctorId(tmp != null ? tmp.toString() : null);
+            data.setChiefDoctorId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Przełozony"))).getId());
             data.setDepartmentId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Departament"))).getId());
             data.setSalary(model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Płaca")).toString());
         } catch (UserMessageException exception) {

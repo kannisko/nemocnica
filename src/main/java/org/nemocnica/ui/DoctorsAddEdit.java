@@ -17,9 +17,9 @@ public class DoctorsAddEdit extends JDialog {
     private JTextField lastName;
     private JTextField specialization;
     private JTextField position;
-    private JTextField chiefDoctorId;
     private JTextField salary;
     private JComboBox depertamentCombo;
+    private JComboBox chiefCombo;
     private DoctorDataClass data;
     boolean add; //dodajemy nowego czy edytujemy?
     public DoctorsAddEdit(String title, DoctorDataClass data, boolean add, Connection connection) {
@@ -33,18 +33,14 @@ public class DoctorsAddEdit extends JDialog {
         setLocationRelativeTo(null);
         getRootPane().setDefaultButton(buttonOK);
         fillDepartamentsComboBox(connection);
+        fillChiefDoctorCombo(connection);
 
         if( !this.add){
             firstName.setText(data.getFirstName());
             lastName.setText(data.getLastName());
             specialization.setText(data.getSpecialization());
             position.setText(data.getPosition());
-            if(data.getChiefDoctorId() == null) {
-                chiefDoctorId.setText("");
-            }
-            else {
-                chiefDoctorId.setText(data.getChiefDoctorId().toString());
-            }
+            chiefCombo.setSelectedItem(new ComboDictionaryItem(data.getChiefDoctorId(),null));
             depertamentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
             salary.setText(data.getSalary().toString());
         }
@@ -88,7 +84,7 @@ public class DoctorsAddEdit extends JDialog {
             data.setLastName(lastName.getText());
             data.setSpecialization(specialization.getText());
             data.setPosition(position.getText());
-            data.setChiefDoctorId(chiefDoctorId.getText());
+            data.setChiefDoctorId(((ComboDictionaryItem)chiefCombo.getSelectedItem()).getId());
 
             data.setDepartmentId(((ComboDictionaryItem)depertamentCombo.getSelectedItem()).getId());
             data.setSalary(salary.getText());
@@ -113,5 +109,9 @@ public class DoctorsAddEdit extends JDialog {
         depertamentCombo.setModel(model);
     }
 
-
+    private void fillChiefDoctorCombo(Connection connection){
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DOCTORS", "doctor_id", "surname","name");
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        chiefCombo.setModel(model);
+    }
 }
