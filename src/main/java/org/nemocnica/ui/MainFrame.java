@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class MainFrame extends JFrame{
     MainFrame() {
-        super("Nemocnica na kraji mesta");
+        super("Aplikacja szpitalna");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -33,7 +33,6 @@ public class MainFrame extends JFrame{
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
         frame.setUserAdminChooser();
-        //start on the center of the screen
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

@@ -38,7 +38,6 @@ public class UserPanel {
         this.panel.setLayout(new GridLayout(1, 1)); //layout manager, dzięki temu kontrolki w środki się resizują
         this.panel.setBorder(BorderFactory.createRaisedBevelBorder()); //ładna ramka, taka sama jak dlas wszystkich innych paneli
 
-
         this.tabbedPane = new JTabbedPane();
 
         JPanel doctorsPanel = new Doctors(connection).getPanel();
@@ -51,21 +50,13 @@ public class UserPanel {
                 "");
 
         JComponent patientsPanel = new Patients(connection).getPanel();
-
-
         tabbedPane.addTab("Pacjenci", null, patientsPanel,
                 "");
 
-        JComponent panel4 = makeTextPanel(
-                "Panel #4 (has a preferred size of 410 x 50).");
-        panel4.setPreferredSize(new Dimension(410, 50));
-        tabbedPane.addTab("Tab 4", null, panel4,
-                "Does nothing at all");
+        JComponent nursesPanel = new Nurses(connection).getPanel();
+        tabbedPane.addTab("Pielęgniarki", null, nursesPanel,
+                "");
 
-
-        //aby nie tracić miejsca na ekranie dodajemy button do powrotu do głownego panelu do paska z zakładkami
-        //ściagniete z http://www.java2s.com/Tutorial/Java/0240__Swing/AddButtontotabbar.htm
-        //pustu panel, nigdy  nie będzie widoczy, button na zakładce bedzie wracał do głownego panelu
         tabbedPane.addTab("", null, new JPanel(),
                 "");
         JButton button = new JButton("Do głównego");
@@ -73,7 +64,7 @@ public class UserPanel {
             if( this.topLevelFrame != null){
                 this.topLevelFrame.setUserAdminChooser();
             }else{
-                //tryb testowy, z lokalnego main
+
                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "cofnie do głownego panelu wyboru");
 
             }

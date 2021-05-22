@@ -116,8 +116,6 @@ public class Doctors {
                             "FROM DOCTORS " +
                             "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id "+
                             "LEFT JOIN DOCTORS AS DOC2 ON DOCTORS.chief_doctor_id = DOC2.doctor_id";
-            //ludzkie nazwy kolumn, potem bedziemy sie po nich odwoływac ddo danych
-            //bezpieczniej niz po id
             String columnNames[] = new String[]{
                     "id", "Imię", "Nazwisko", "Specjalizacja", "Stanowisko", "Przełozony",  "Departament", "Płaca"
 

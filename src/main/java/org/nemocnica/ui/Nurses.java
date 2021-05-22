@@ -10,22 +10,23 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.Vector;
 
-public class Patients {
+public class Nurses {
+    
     private JPanel panel;
-    private JTable patientsTable;
+    private JTable nursesTable;
     private JButton editButton;
     private JButton addButton;
     private JButton deleteButton;
 
     Connection connection;
 
-    public Patients(Connection connection) {
+    public Nurses(Connection connection) {
         this.connection = connection;
         /*addButton.addActionListener(e -> addNewDepartment());
         editButton.addActionListener(e -> editDepartment());
         deleteButton.addActionListener(e -> deleteDepartment());*/
         try {
-            refreshPatientsTab();
+            refreshNursesTab();
         } catch (UserMessageException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -37,13 +38,13 @@ public class Patients {
 
         try (Statement stmt = connection.createStatement()) {
             String sql =
-                    "SELECT PATIENTS.patient_id, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id, DEPARTMENTS.name " +
-                            "FROM PATIENTS " +
-                            "LEFT JOIN DEPARTMENTS ON PATIENTS.department_id = DEPARTMENTS.department_id " +
-                    "LEFT JOIN DOCTORS ON PATIENTS.main_doctor_id = DOCTORS.doctor_id ";
+                    "SELECT NURSES.nurse_id, NURSES.name, NURSES.surname, NURSES.chief_nurse_id, NURSESHEAD.name, NURSESHEAD.surname, NURSES.department_id, DEPARTMENTS.name, NURSES.salary "+
+                            "FROM NURSES " +
+                            "LEFT JOIN DEPARTMENTS ON NURSES.department_id = DEPARTMENTS.department_id " +
+                            "LEFT JOIN NURSES AS NURSESHEAD ON NURSES.chief_nurse_id = NURSESHEAD.nurse_id";
 
             String[] columnNames = new String[]{
-                    "id", "Doktor prowadzący", "Nazwa oddziału"
+                    "id", "Imię", "Nazwisko", "Przełozony", "Departament", "Płaca"
 
             };
             ResultSet rs = stmt.executeQuery(sql);
@@ -54,19 +55,24 @@ public class Patients {
             Vector<Vector<Object>> data = new Vector<>();
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
-                currentRow.add(rs.getInt(1));
-                int main_doctor_id = rs.getInt(2);
-                String main_doctor_name = rs.getString(3);
-                String main_doctor_surname = rs.getString(4);
-                if (main_doctor_surname != null)
-                {
-                    main_doctor_surname += " " + main_doctor_name;
 
+                currentRow.add(rs.getInt(1));
+                currentRow.add(rs.getString(2));
+                currentRow.add(rs.getString(3));
+
+                Integer chief_nurse_id = rs.getInt(4);
+                String chief_name = rs.getString(5);
+                String chief_surname = rs.getString(6);
+                if( chief_surname != null){
+                    chief_surname += " " + chief_name;
                 }
-                int department_id = rs.getInt(5);
-                String department_name = rs.getString(6);
-                currentRow.add(new ComboDictionaryItem(main_doctor_id,main_doctor_surname));
-                currentRow.add(new ComboDictionaryItem(department_id, department_name));
+                currentRow.add(new ComboDictionaryItem(chief_nurse_id,chief_surname));
+
+                Integer department_id = rs.getInt(7);
+                String department_name = rs.getString(8);
+                currentRow.add(new ComboDictionaryItem(department_id,department_name));
+                currentRow.add(rs.getObject(9));
+
                 data.add(currentRow);
             }
 
@@ -83,13 +89,14 @@ public class Patients {
 
     }
 
-    private void refreshPatientsTab() throws UserMessageException {
+    private void refreshNursesTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
-        patientsTable.setModel(tableModel);
-        patientsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        nursesTable.setModel(tableModel);
+        nursesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (tableModel.getRowCount() > 0) {
-            patientsTable.setRowSelectionInterval(0, 0);
+            nursesTable.setRowSelectionInterval(0, 0);
         }
     }
+    
     
 }
