@@ -18,10 +18,12 @@ public class DoctorsAddEdit extends JDialog {
     private JTextField specialization;
     private JTextField position;
     private JTextField salary;
-    private JComboBox depertamentCombo;
+    private JComboBox departmentCombo;
     private JComboBox chiefCombo;
+
     private DoctorDataClass data;
     boolean add; //dodajemy nowego czy edytujemy?
+
     public DoctorsAddEdit(String title, DoctorDataClass data, boolean add, Connection connection) {
         this.data = data;
         this.add = add;
@@ -32,7 +34,7 @@ public class DoctorsAddEdit extends JDialog {
         setModal(true);
         setLocationRelativeTo(null);
         getRootPane().setDefaultButton(buttonOK);
-        fillDepartamentsComboBox(connection);
+        fillDepartmentsComboBox(connection);
         fillChiefDoctorCombo(connection);
 
         if(!this.add){
@@ -41,7 +43,7 @@ public class DoctorsAddEdit extends JDialog {
             specialization.setText(data.getSpecialization());
             position.setText(data.getPosition());
             chiefCombo.setSelectedItem(new ComboDictionaryItem(data.getChiefDoctorId(),null));
-            depertamentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
+            departmentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
             salary.setText(data.getSalary().toString());
         }
 
@@ -81,7 +83,7 @@ public class DoctorsAddEdit extends JDialog {
             data.setPosition(position.getText());
             data.setChiefDoctorId(((ComboDictionaryItem)chiefCombo.getSelectedItem()).getId());
 
-            data.setDepartmentId(((ComboDictionaryItem)depertamentCombo.getSelectedItem()).getId());
+            data.setDepartmentId(((ComboDictionaryItem)departmentCombo.getSelectedItem()).getId());
             data.setSalary(salary.getText());
 
             data.setoKButtonClicked(true);
@@ -97,10 +99,10 @@ public class DoctorsAddEdit extends JDialog {
         dispose();
     }
 
-    private void fillDepartamentsComboBox(Connection connection){
+    private void fillDepartmentsComboBox(Connection connection){
         Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DEPARTMENTS", "department_id", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
-        depertamentCombo.setModel(model);
+        departmentCombo.setModel(model);
     }
 
     private void fillChiefDoctorCombo(Connection connection){

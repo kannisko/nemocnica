@@ -1,22 +1,25 @@
 package org.nemocnica.ui;
 
-import javax.swing.*;
 import org.nemocnica.database.DatabaseOperations;
+import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
 
+import javax.swing.*;
 import java.awt.event.*;
 import java.sql.Connection;
+import java.util.Vector;
 
-public class DepartmentsAddEdit extends JDialog{
+public class PatientsAddEdit extends JDialog {
     private JPanel contentPane;
+    private JComboBox doctorCombo;
+    private JComboBox departmentCombo;
     private JButton buttonCancel;
     private JButton buttonOK;
-    private JTextField departmentName;
 
-    private DepartmentDataClass data;
+    private PatientDataClass data;
     boolean add;
 
-    public DepartmentsAddEdit(String title, DepartmentDataClass data, boolean add, Connection connection) {
+    public PatientsAddEdit(String title, PatientDataClass data, boolean add, Connection connection) {
         this.data = data;
         this.add = add;
         setTitle(title);
@@ -26,9 +29,12 @@ public class DepartmentsAddEdit extends JDialog{
         setModal(true);
         setLocationRelativeTo(null);
         getRootPane().setDefaultButton(buttonOK);
+        fillDoctorsComboBox(connection);
+        fillDepartmentsComboBox(connection);
 
-        if(!this.add){
-            departmentName.setText(data.getDepartmentName());
+        if (!this.add) {
+            doctorCombo.setSelectedItem(new ComboDictionaryItem(data.getDoctorId(), null));
+            departmentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
         }
 
         buttonOK.addActionListener(new ActionListener() {
@@ -61,7 +67,8 @@ public class DepartmentsAddEdit extends JDialog{
 
     private void onOK() {
         try {
-            data.setDepartmentName(departmentName.getText());
+            data.setDoctorId(((ComboDictionaryItem)doctorCombo.getSelectedItem()).getId());
+            data.setDepartmentId(((ComboDictionaryItem)departmentCombo.getSelectedItem()).getId());
 
             data.setoKButtonClicked(true);
             dispose();
@@ -74,5 +81,17 @@ public class DepartmentsAddEdit extends JDialog{
     private void onCancel() {
         data.setoKButtonClicked(false);
         dispose();
+    }
+
+    private void fillDoctorsComboBox(Connection connection) {
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, "DOCTORS", "doctor_id", "name");
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        doctorCombo.setModel(model);
+    }
+
+    private void fillDepartmentsComboBox(Connection connection) {
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DEPARTMENTS", "department_id", "name");
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        departmentCombo.setModel(model);
     }
 }

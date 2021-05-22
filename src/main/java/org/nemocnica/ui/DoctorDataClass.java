@@ -147,8 +147,11 @@ public class DoctorDataClass {
         String update = "UPDATE DOCTORS SET ";
         update += "name='" + getFirstName() + "',";
         update += "surname='" + getLastName() + "',";
+        update += "med_specialisation='" + getSpecialization() + "',";
+        update += "position='" + getPosition() + "',";
         update += "chief_doctor_id="+getChiefDoctorId() + ",";
-        update += "department_id=" + getDepartmentId();
+        update += "department_id=" + getDepartmentId() + ",";
+        update += "salary=" + getSalary();
 
 
         update += " WHERE doctor_id=" + getId();
