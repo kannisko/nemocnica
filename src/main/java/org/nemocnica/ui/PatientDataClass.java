@@ -1,11 +1,12 @@
 package org.nemocnica.ui;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nemocnica.utils.UserMessageException;
 
 public class PatientDataClass {
     private int id;
-    private int doctorId;
-    private int departmentId;
+    private Integer doctorId;
+    private Integer departmentId;
 
     private boolean oKButtonClicked;
 
@@ -18,8 +19,8 @@ public class PatientDataClass {
     }
 
     public void setDoctorId(Integer doctorId) throws UserMessageException {
-        if (doctorId == null || doctorId < 0) {
-            throw new UserMessageException("Department Id can't be a null or negative number");
+        if (doctorId == null) {
+            throw new UserMessageException("Doctor Id can't be a negative number");
         }
         this.doctorId = doctorId;
     }
@@ -28,9 +29,9 @@ public class PatientDataClass {
         return doctorId;
     }
 
-    public void setDepartmentId(Integer departmentId) throws UserMessageException {
-        if (departmentId == null || departmentId < 0) {
-            throw new UserMessageException("Department Id can't be a null or negative number");
+    public void setDepartmentId(int departmentId) throws UserMessageException {
+        if (departmentId < 0) {
+            throw new UserMessageException("Department Id can't be a negative number");
         }
         this.departmentId = departmentId;
     }
@@ -56,9 +57,10 @@ public class PatientDataClass {
     }
 
     public String getUpdateString() {
-        String update = "UPDATE DEPARTMENTS SET ";
+        String update = "UPDATE PATIENTS SET ";
         update += "main_doctor_id=" + getDoctorId() + ",";
-        update += "depatment_id=" + getDepartmentId();
+        update += "department_id=" + getDepartmentId();
+
         update += " WHERE department_id=" + getId();
         return update;
     }

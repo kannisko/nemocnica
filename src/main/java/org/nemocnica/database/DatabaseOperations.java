@@ -102,7 +102,7 @@ public class DatabaseOperations {
             throw new UserMessageException(exception.getMessage());
         }
     }
-    public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, String table, String idColumn, String ... nameColumns){
+    public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, boolean nullOption, String table, String idColumn, String ... nameColumns){
         //sklej nazwy kolumn, daj przecinki pomiedzy, ale nie przed pierwsza i nie po ostatniej
         String columns = "";
         for( int i=0; i< nameColumns.length; i++){
@@ -113,7 +113,9 @@ public class DatabaseOperations {
         }
         String sql = String.format("SELECT %s, %s FROM %s ORDER BY %s ASC",idColumn,columns,table,columns);
         Vector<ComboDictionaryItem> vector = new Vector<>();
-        vector.add(new ComboDictionaryItem(null,"<bez wyboru>"));
+        if(nullOption) {
+            vector.add(new ComboDictionaryItem(null, "<bez wyboru>"));
+        }
         try( Statement stmt = connection.createStatement()){
             ResultSet rs = stmt.executeQuery(sql);
             while( rs.next()){

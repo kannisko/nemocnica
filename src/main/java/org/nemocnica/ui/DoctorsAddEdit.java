@@ -100,13 +100,13 @@ public class DoctorsAddEdit extends JDialog {
     }
 
     private void fillDepartmentsComboBox(Connection connection){
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DEPARTMENTS", "department_id", "name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DEPARTMENTS", "department_id", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         departmentCombo.setModel(model);
     }
 
     private void fillChiefDoctorCombo(Connection connection){
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DOCTORS", "doctor_id", "surname","name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, true,"DOCTORS", "doctor_id", "surname","name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         chiefCombo.setModel(model);
     }

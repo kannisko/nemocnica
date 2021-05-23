@@ -84,13 +84,13 @@ public class PatientsAddEdit extends JDialog {
     }
 
     private void fillDoctorsComboBox(Connection connection) {
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, "DOCTORS", "doctor_id", "name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DOCTORS", "doctor_id", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         doctorCombo.setModel(model);
     }
 
     private void fillDepartmentsComboBox(Connection connection) {
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection,"DEPARTMENTS", "department_id", "name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DEPARTMENTS", "department_id", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         departmentCombo.setModel(model);
     }

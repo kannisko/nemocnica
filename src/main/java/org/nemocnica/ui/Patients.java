@@ -1,10 +1,12 @@
 package org.nemocnica.ui;
 
+import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.sql.*;
 import java.util.Arrays;
@@ -21,18 +23,80 @@ public class Patients {
 
     public Patients(Connection connection) {
         this.connection = connection;
-        /*addButton.addActionListener(e -> addNewDepartment());
-        editButton.addActionListener(e -> editDepartment());
-        deleteButton.addActionListener(e -> deleteDepartment());*/
+        addButton.addActionListener(e -> addNewPatient());
+        editButton.addActionListener(e -> editPatient());
+        deleteButton.addActionListener(e -> deletePatient());
+
         try {
             refreshPatientsTab();
         } catch (UserMessageException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+
     public JPanel getPanel () {
         return panel;
     }
+
+    private void deletePatient() {
+        int selectedRow = patientsTable.getSelectedRow();
+        if (selectedRow < 0) {
+            return;
+        }
+
+        Object objectId = patientsTable.getModel().getValueAt(selectedRow, 0);
+
+        try {
+            DatabaseOperations.deleteFromTable(connection, "PATIENTS", "PATIENT_ID", objectId.toString());
+            refreshPatientsTab();
+        } catch (UserMessageException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void addNewPatient() {
+        PatientDataClass data = new PatientDataClass();
+        PatientsAddEdit box = new PatientsAddEdit("Wprowadź dane pacjenta", data, true, connection);
+        box.setVisible(true);
+        if (data.isoKButtonClicked()) {
+            String insertString = data.getInsertString();
+            try {
+                DatabaseOperations.executeStatement(connection, insertString);
+                refreshPatientsTab();
+            } catch (UserMessageException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
+    }
+
+    private void editPatient() {
+        int selectedRow = patientsTable.getSelectedRow();
+        if (selectedRow < 0) {
+            return;
+        }
+        TableModel model = patientsTable.getModel();
+        PatientDataClass data = new PatientDataClass();
+        try {
+            TableColumnModel tableColumnModel = patientsTable.getColumnModel();
+            data.setId((int) model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("id")));
+            data.setDoctorId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Doktor prowadzący"))).getId());
+            data.setDepartmentId(((ComboDictionaryItem)model.getValueAt(selectedRow, tableColumnModel.getColumnIndex("Nazwa oddziału"))).getId());
+        } catch (UserMessageException e) {
+            throw new IllegalStateException("This should never happen, illegal values in database");
+        }
+        PatientsAddEdit box = new PatientsAddEdit("Edytuj dane pacjenta", data, false, connection);
+        box.setVisible(true);
+        if (data.isoKButtonClicked()) {
+            String updateString = data.getUpdateString();
+            try {
+                DatabaseOperations.executeStatement(connection, updateString);
+                refreshPatientsTab();
+            } catch (UserMessageException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
+    }
+
     TableModel getTableModel () throws UserMessageException {
 
         try (Statement stmt = connection.createStatement()) {
