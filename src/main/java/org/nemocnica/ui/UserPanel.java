@@ -89,7 +89,7 @@ public class UserPanel {
         JFrame frame = new JFrame("testowe okienko");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = frame.getContentPane();
-        UserPanel userPanel = new UserPanel(null);//nie mamy MainFrame, ale do szybkiego poglądu obędziemy się bez
+        UserPanel userPanel = new UserPanel(null);
         contentPane.add(userPanel.getPanel() );
         frame.pack();
         frame.setResizable(true);
