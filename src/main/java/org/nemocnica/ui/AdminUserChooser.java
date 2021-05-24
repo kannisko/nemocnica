@@ -18,6 +18,6 @@ public class AdminUserChooser {
 
         adminButton.addActionListener(e->topLevelFrame.setAdminPanel());
         userButton.addActionListener(e->topLevelFrame.setUserPanel());
-
+        //e->JOptionPane.showMessageDialog(topLevelFrame, "Jak wymyślę, wynik przyślę (okienko usera)"));
     }
 }

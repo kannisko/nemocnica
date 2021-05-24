@@ -8,17 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 
-
-
 public class UserPanel {
-
+    //główna ramka programu
     private MainFrame topLevelFrame;
-
+    //głowny element wizualny tego widoku
     private JPanel panel;
 
     private JTabbedPane tabbedPane;
 
-
+    //połaczenie do bazy danych, jedno wspólne dla wszystkich zakładek doktorzy/pacjenci i co tam dalej
     private Connection connection;
     public UserPanel(MainFrame topLevelFrame) {
         AppProperties appProperties = AppProperties.getInstance();
@@ -55,7 +53,6 @@ public class UserPanel {
 
         tabbedPane.addTab("", null, new JPanel(),
                 "");
-
         JButton button = new JButton("Do głównego");
         button.addActionListener(e->{
             if( this.topLevelFrame != null){
@@ -71,7 +68,7 @@ public class UserPanel {
 
 
 
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);//jaby zakładek było tyle,że się nie mieszczą
         panel.add(tabbedPane);
 
     }
@@ -93,11 +90,11 @@ public class UserPanel {
         JFrame frame = new JFrame("testowe okienko");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = frame.getContentPane();
-        UserPanel userPanel = new UserPanel(null);
+        UserPanel userPanel = new UserPanel(null);//nie mamy MainFrame, ale do szybkiego poglądu obędziemy się bez
         contentPane.add(userPanel.getPanel() );
         frame.pack();
         frame.setResizable(true);
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);//centruj na ekranie
         frame.setVisible(true);
 
     }

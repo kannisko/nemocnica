@@ -17,6 +17,7 @@ public class PatientsAddEdit extends JDialog {
     private JTextField lastName;
     private JButton buttonCancel;
     private JButton buttonOK;
+    private JLabel Nazwisko;
 
     private PatientDataClass data;
     boolean add;
@@ -54,7 +55,7 @@ public class PatientsAddEdit extends JDialog {
             }
         });
 
-
+        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -62,7 +63,7 @@ public class PatientsAddEdit extends JDialog {
             }
         });
 
-
+        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -90,7 +91,7 @@ public class PatientsAddEdit extends JDialog {
     }
 
     private void fillDoctorsComboBox(Connection connection) {
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DOCTORS", "doctor_id", "surname", "name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DOCTORS", "doctor_id", "name", "surname");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         doctorCombo.setModel(model);
     }
