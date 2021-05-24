@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.Properties;
 
-//singleto pattern - jeden obiekt w całej aplikacji
+
 public class AppProperties {
     private static final Logger logger = LoggerFactory.getLogger(AppProperties.class.getName());
 
@@ -19,7 +19,7 @@ public class AppProperties {
     private String propertyFilePath;
     private Properties properties;
 
-    //zawsze ten sam jeden jedyny obiekt
+
     public static AppProperties getInstance() {
         if (instance == null) {
             instance = new AppProperties();
@@ -27,12 +27,12 @@ public class AppProperties {
         return instance;
     }
 
-    //prywatny konstruktor - nie można stworzyć obiektu tej klasy poza nią samą
+
     private AppProperties() {
         this.properties = new Properties();
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         this.propertyFilePath = rootPath + PROPERTY_FILENAME;
-        //try-with-resources - zamyka otwarte pliki etc.
+
         try (InputStream inputStream = new FileInputStream(propertyFilePath)) {
             properties.load(inputStream);
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class AppProperties {
     }
 
     public void saveProperties() {
-        //try-with-resources - zamyka otwarte pliki etc.
+
         try (OutputStream outputStream = new FileOutputStream(propertyFilePath)) {
             properties.store(outputStream, "#");
         } catch (IOException e) {

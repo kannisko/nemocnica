@@ -27,6 +27,7 @@ public class Patients {
         editButton.addActionListener(e -> editPatient());
         deleteButton.addActionListener(e -> deletePatient());
 
+
         try {
             refreshPatientsTab();
         } catch (UserMessageException e) {
@@ -101,13 +102,13 @@ public class Patients {
 
         try (Statement stmt = connection.createStatement()) {
             String sql =
-                    "SELECT PATIENTS.patient_id, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id, DEPARTMENTS.name " +
+                    "SELECT PATIENTS.patient_id, PATIENTS.name, PATIENTS.surname, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id, DEPARTMENTS.name " +
                             "FROM PATIENTS " +
                             "LEFT JOIN DEPARTMENTS ON PATIENTS.department_id = DEPARTMENTS.department_id " +
                     "LEFT JOIN DOCTORS ON PATIENTS.main_doctor_id = DOCTORS.doctor_id ";
 
             String[] columnNames = new String[]{
-                    "id", "Doktor prowadzący", "Nazwa oddziału"
+                    "id", "Imie", "Nazwisko", "Doktor prowadzący", "Nazwa oddziału"
 
             };
             ResultSet rs = stmt.executeQuery(sql);
@@ -119,18 +120,21 @@ public class Patients {
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
                 currentRow.add(rs.getInt(1));
-                int main_doctor_id = rs.getInt(2);
-                String main_doctor_name = rs.getString(3);
-                String main_doctor_surname = rs.getString(4);
+                currentRow.add(rs.getString(2));
+                currentRow.add(rs.getString(3));
+                int main_doctor_id = rs.getInt(4);
+                String main_doctor_name = rs.getString(5);
+                String main_doctor_surname = rs.getString(6);
                 if (main_doctor_surname != null)
                 {
                     main_doctor_surname += " " + main_doctor_name;
 
                 }
-                int department_id = rs.getInt(5);
-                String department_name = rs.getString(6);
+                int department_id = rs.getInt(7);
+                String department_name = rs.getString(8);
                 currentRow.add(new ComboDictionaryItem(main_doctor_id,main_doctor_surname));
                 currentRow.add(new ComboDictionaryItem(department_id, department_name));
+
                 data.add(currentRow);
             }
 

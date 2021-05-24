@@ -103,7 +103,7 @@ public class DatabaseOperations {
         }
     }
     public static Vector<ComboDictionaryItem> getComboDictionary(Connection connection, boolean nullOption, String table, String idColumn, String ... nameColumns){
-        //sklej nazwy kolumn, daj przecinki pomiedzy, ale nie przed pierwsza i nie po ostatniej
+
         String columns = "";
         for( int i=0; i< nameColumns.length; i++){
             if( i != 0) {
@@ -139,7 +139,7 @@ public class DatabaseOperations {
 
 
     public static void main(String args[]) throws UserMessageException, SQLException {
-        //wypisz co w tablicy doktorzy
+
         Connection connection = connectToDatabase(AppProperties.getInstance().getDatabasenamePath());
         Statement stmt = connection.createStatement();
         String sql = "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+

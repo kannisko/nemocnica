@@ -8,21 +8,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 
-//panel użytkownika
-//kontrolki dodawane "z ręki", aby pokazać,że tak też umiemy
-//opis jat tego użyć wyczytany w oficjalnej dokumentacji Oracle
-//https://docs.oracle.com/javase/tutorial/uiswing/components/tabbedpane.html
-//ale inne panele robimy w edytorze graficznym, bo lepiej
+
 
 public class UserPanel {
-    //główna ramka programu
+
     private MainFrame topLevelFrame;
-    //głowny element wizualny tego widoku
+
     private JPanel panel;
 
     private JTabbedPane tabbedPane;
 
-    //połaczenie do bazy danych, jedno wspólne dla wszystkich zakładek doktorzy/pacjenci i co tam dalej
+
     private Connection connection;
     public UserPanel(MainFrame topLevelFrame) {
         AppProperties appProperties = AppProperties.getInstance();
@@ -59,6 +55,7 @@ public class UserPanel {
 
         tabbedPane.addTab("", null, new JPanel(),
                 "");
+
         JButton button = new JButton("Do głównego");
         button.addActionListener(e->{
             if( this.topLevelFrame != null){
@@ -74,7 +71,7 @@ public class UserPanel {
 
 
 
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);//jaby zakładek było tyle,że się nie mieszczą
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         panel.add(tabbedPane);
 
     }
@@ -96,11 +93,11 @@ public class UserPanel {
         JFrame frame = new JFrame("testowe okienko");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = frame.getContentPane();
-        UserPanel userPanel = new UserPanel(null);//nie mamy MainFrame, ale do szybkiego poglądu obędziemy się bez
+        UserPanel userPanel = new UserPanel(null);
         contentPane.add(userPanel.getPanel() );
         frame.pack();
         frame.setResizable(true);
-        frame.setLocationRelativeTo(null);//centruj na ekranie
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
     }

@@ -42,10 +42,10 @@ public class Doctors {
 
     private void deleteDoctor() {
         int selectedRow = doctorsTable.getSelectedRow();
-        if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
+        if (selectedRow < 0) {
             return;
         }
-        //id jest pierwszą kolumną, wartośc wyciagamy z modelu, zakładamy,że jset typu int
+
         Object objectId = doctorsTable.getModel().getValueAt(selectedRow, 0);
 
         try {
@@ -57,12 +57,12 @@ public class Doctors {
     }
 
     private void addNewDoctor() {
-        //czyste dane, bo nowy
+
         DoctorDataClass data = new DoctorDataClass();
         DoctorsAddEdit box = new DoctorsAddEdit("Wprowadź nowego lekarza", data, true, connection);
         box.setVisible(true);
         if (data.isoKButtonClicked()) {
-            //pobierz string dla inserta dla bazy i wykonaj
+
             String insertString = data.getInsertString();
             try {
                 DatabaseOperations.executeStatement(connection, insertString);
@@ -75,11 +75,11 @@ public class Doctors {
 
     private void editDoctor() {
         int selectedRow = doctorsTable.getSelectedRow();
-        if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
+        if (selectedRow < 0) {
             return;
         }
         TableModel model = doctorsTable.getModel();
-        //dane tego co wybrane w tabeli
+
         DoctorDataClass data = new DoctorDataClass();
         try {
             TableColumnModel tableColumnModel = doctorsTable.getColumnModel();
@@ -108,8 +108,7 @@ public class Doctors {
     }
 
     TableModel getTableModel() throws UserMessageException {
-        //try-with-resources - zamknie statement nawet jak wyjatek czy cos takiego
-        //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+
         try (Statement stmt = connection.createStatement()) {
             String sql =
                     "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+
@@ -129,7 +128,7 @@ public class Doctors {
             Vector<Vector<Object>> data = new Vector<>();
             while (rs.next()) {
                 Vector<Object> currentRow = new Vector<>();
-                //id
+
                 currentRow.add(rs.getInt(1));
                 //imię, nazwisko,specjalizacja, stanowisko
                 currentRow.add(rs.getString(2));
@@ -139,7 +138,7 @@ public class Doctors {
 
                 //przełozony
                 Integer chief_doctor_id = rs.getInt(6);
-                //imię i nazwisko przełozonego i kleimy, iżby pięknie buło
+
                 String chief_name = rs.getString(10);
                 String chief_surname = rs.getString(11);
                 if( chief_surname != null){
@@ -159,13 +158,13 @@ public class Doctors {
                 data.add(currentRow);
             }
 
-            //tak zwana anonimowa klasa, nadpisuje niektóre metody
+
             return new DefaultTableModel(data, columnNamesVector) {
 
-                // https://stackoverflow.com/questions/21350011/java-how-to-disable-the-jtable-editable-when-click-it
+
                 @Override
                 public boolean isCellEditable(int row, int column) {
-                    return false; // or a condition at your choice with row and column
+                    return false;
                 }
             };
 
@@ -178,7 +177,6 @@ public class Doctors {
     private void refreshDoctorsTab() throws UserMessageException {
         TableModel tableModel = getTableModel();
         doctorsTable.setModel(tableModel);
-        // https://stackoverflow.com/questions/18309113/jtable-how-to-force-user-to-select-exactly-one-row
         doctorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (tableModel.getRowCount() > 0) {
             doctorsTable.setRowSelectionInterval(0, 0);

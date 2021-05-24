@@ -2,7 +2,7 @@ package org.nemocnica.utils;
 
 import java.util.Objects;
 
-//equals tylko po id - bardzo przydatne czy ustawianiu selekcji w combo jak mamy tylko id na wejsciu
+
 public class ComboDictionaryItem {
     private String name;
     private Integer id;

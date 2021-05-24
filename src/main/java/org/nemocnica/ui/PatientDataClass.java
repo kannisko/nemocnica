@@ -7,7 +7,8 @@ public class PatientDataClass {
     private int id;
     private Integer doctorId;
     private Integer departmentId;
-
+    private String firstName;
+    private String lastName;
     private boolean oKButtonClicked;
 
     public void setId(int id) {
@@ -24,6 +25,16 @@ public class PatientDataClass {
         }
         this.doctorId = doctorId;
     }
+    public void setFirstName(String name) throws UserMessageException {
+
+        this.firstName = name;
+    }
+
+    public void setLastName(String surname) throws UserMessageException {
+
+        this.lastName = surname;
+    }
+
 
     public int getDoctorId() {
         return doctorId;
@@ -34,6 +45,11 @@ public class PatientDataClass {
             throw new UserMessageException("Department Id can't be a negative number");
         }
         this.departmentId = departmentId;
+    }
+
+    public String getLastName() { return lastName; }
+    public String getFirstName() {
+        return firstName;
     }
 
     public Integer getDepartmentId() {
@@ -49,18 +65,23 @@ public class PatientDataClass {
     }
 
     public String getInsertString() {
-        String insert = "INSERT INTO PATIENTS (main_doctor_id,department_id) VALUES (";
-        insert += getDoctorId() + ","; //Doctor id
+        String insert = "INSERT INTO PATIENTS (name, surname, main_doctor_id,department_id) VALUES (";
+        insert += "'" + getFirstName() + "',"; //name
+        insert += "'" + getLastName() + "',"; //surname
+        insert += getDoctorId() + ",";
         insert += getDepartmentId();
+
+
         insert += ")";
         return insert;
     }
 
     public String getUpdateString() {
         String update = "UPDATE PATIENTS SET ";
+        update += "name='" + getFirstName() + "',";
+        update += "surname='" + getLastName() + "',";
         update += "main_doctor_id=" + getDoctorId() + ",";
         update += "department_id=" + getDepartmentId();
-
         update += " WHERE department_id=" + getId();
         return update;
     }

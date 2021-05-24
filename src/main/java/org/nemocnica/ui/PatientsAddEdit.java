@@ -13,6 +13,8 @@ public class PatientsAddEdit extends JDialog {
     private JPanel contentPane;
     private JComboBox doctorCombo;
     private JComboBox departmentCombo;
+    private JTextField firstName;
+    private JTextField lastName;
     private JButton buttonCancel;
     private JButton buttonOK;
 
@@ -33,8 +35,11 @@ public class PatientsAddEdit extends JDialog {
         fillDepartmentsComboBox(connection);
 
         if (!this.add) {
+            firstName.setText(data.getFirstName());
+            lastName.setText(data.getLastName());
             doctorCombo.setSelectedItem(new ComboDictionaryItem(data.getDoctorId(), null));
             departmentCombo.setSelectedItem(new ComboDictionaryItem(data.getDepartmentId(),null));
+
         }
 
         buttonOK.addActionListener(new ActionListener() {
@@ -49,7 +54,7 @@ public class PatientsAddEdit extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -57,7 +62,7 @@ public class PatientsAddEdit extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
+
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -67,9 +72,10 @@ public class PatientsAddEdit extends JDialog {
 
     private void onOK() {
         try {
+            data.setFirstName(firstName.getText());
+            data.setLastName(lastName.getText());
             data.setDoctorId(((ComboDictionaryItem)doctorCombo.getSelectedItem()).getId());
             data.setDepartmentId(((ComboDictionaryItem)departmentCombo.getSelectedItem()).getId());
-
             data.setoKButtonClicked(true);
             dispose();
         }
@@ -84,7 +90,7 @@ public class PatientsAddEdit extends JDialog {
     }
 
     private void fillDoctorsComboBox(Connection connection) {
-        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DOCTORS", "doctor_id", "name");
+        Vector<ComboDictionaryItem> items = DatabaseOperations.getComboDictionary(connection, false,"DOCTORS", "doctor_id", "surname", "name");
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         doctorCombo.setModel(model);
     }

@@ -43,10 +43,10 @@ public class Departments {
 
     private void deleteDepartment() {
         int selectedRow = departmentsTable.getSelectedRow();
-        if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
+        if (selectedRow < 0) {
             return;
         }
-        //id jest pierwszą kolumną, wartośc wyciagamy z modelu, zakładamy,że jest typu int
+
         Object objectId = departmentsTable.getModel().getValueAt(selectedRow, 0);
 
         try {

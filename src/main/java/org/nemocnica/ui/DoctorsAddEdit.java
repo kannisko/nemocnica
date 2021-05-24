@@ -22,7 +22,7 @@ public class DoctorsAddEdit extends JDialog {
     private JComboBox chiefCombo;
 
     private DoctorDataClass data;
-    boolean add; //dodajemy nowego czy edytujemy?
+    boolean add;
 
     public DoctorsAddEdit(String title, DoctorDataClass data, boolean add, Connection connection) {
         this.data = data;
@@ -59,7 +59,7 @@ public class DoctorsAddEdit extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -67,7 +67,7 @@ public class DoctorsAddEdit extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
+
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
