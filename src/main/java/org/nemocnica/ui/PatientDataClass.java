@@ -10,6 +10,8 @@ public class PatientDataClass {
     private String firstName;
     private String lastName;
     private boolean oKButtonClicked;
+    private static final String onlyLettersRegex = "^[a-zA-Z]+$";
+    private static final String capitalFirstLetterRegex = "[A-Z]\\S+";
 
     public void setId(int id) {
         this.id = id;
@@ -25,14 +27,24 @@ public class PatientDataClass {
         }
         this.doctorId = doctorId;
     }
-    public void setFirstName(String name) throws UserMessageException {
-
-        this.firstName = name;
+    public void setFirstName(String name) throws UserMessageException  {
+        if (!name.matches(onlyLettersRegex)) {
+            throw new UserMessageException("First name can only contain letters");
+        } else if (!name.matches(capitalFirstLetterRegex)) {
+            throw new UserMessageException("First letter of first name should be uppercase");
+        } else {
+            this.firstName = name;
+        }
     }
 
-    public void setLastName(String surname) throws UserMessageException {
-
-        this.lastName = surname;
+    public void setLastName(String surname) throws UserMessageException  {
+        if (!surname.matches(onlyLettersRegex)) {
+            throw new UserMessageException("Last name can only contain letters");
+        } else if (!surname.matches(capitalFirstLetterRegex)) {
+            throw new UserMessageException("First letter of last name should be uppercase");
+        } else {
+            this.lastName = surname;
+        }
     }
 
 

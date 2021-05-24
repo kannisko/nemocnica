@@ -16,7 +16,6 @@ public class UserPanel {
 
     private JTabbedPane tabbedPane;
 
-    //połaczenie do bazy danych, jedno wspólne dla wszystkich zakładek doktorzy/pacjenci i co tam dalej
     private Connection connection;
     public UserPanel(MainFrame topLevelFrame) {
         AppProperties appProperties = AppProperties.getInstance();
@@ -29,8 +28,8 @@ public class UserPanel {
 
         this.topLevelFrame = topLevelFrame;
         this.panel = new JPanel();
-        this.panel.setLayout(new GridLayout(1, 1)); //layout manager, dzięki temu kontrolki w środki się resizują
-        this.panel.setBorder(BorderFactory.createRaisedBevelBorder()); //ładna ramka, taka sama jak dlas wszystkich innych paneli
+        this.panel.setLayout(new GridLayout(1, 1));
+        this.panel.setBorder(BorderFactory.createRaisedBevelBorder());
 
         this.tabbedPane = new JTabbedPane();
 
