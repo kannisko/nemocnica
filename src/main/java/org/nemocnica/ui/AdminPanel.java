@@ -1,6 +1,7 @@
 package org.nemocnica.ui;
 
 import org.nemocnica.database.DatabaseOperations;
+import org.nemocnica.database.ROW_EXPORTER;
 import org.nemocnica.utils.AppProperties;
 import org.nemocnica.utils.UserMessageException;
 
@@ -15,6 +16,7 @@ public class AdminPanel{
     private JButton createDataBase;
     private JTextField databaseName;
     private JButton chooseFolderButton;
+    private JButton exportData;
 
     private AppProperties appProperties;
     private MainFrame topLevelFrame;
@@ -32,6 +34,7 @@ public class AdminPanel{
         createDataBase.addActionListener(e -> onCreateDataBase());
         createTables.addActionListener(e->onCreateTables());
         addTestData.addActionListener(e->onAddTestData());
+        exportData.addActionListener(e->onExportData());
     }
 
     public JPanel getPanel() {
@@ -78,4 +81,16 @@ public class AdminPanel{
         }
     }
 
+    private void onExportData(){
+        //katalog do którego wywalić tablice, może doróbcie jakis wybór?
+        String exportToPath = "nemocnica.dump";
+        ROW_EXPORTER exporter = ROW_EXPORTER.TO_SQL_INSERT; //też może jakiś wybór zrobić?
+        try{
+        DatabaseOperations.exportDataBase(appProperties.getDatabasenamePath(),exportToPath,exporter);
+            JOptionPane.showMessageDialog(topLevelFrame, "Tables exported");
+        } catch (UserMessageException exception) {
+            JOptionPane.showMessageDialog(topLevelFrame, exception.getMessage());
+        }
+
+    }
 }
