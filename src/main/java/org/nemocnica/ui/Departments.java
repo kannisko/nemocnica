@@ -30,6 +30,11 @@ public class Departments {
         addButton.addActionListener(e -> addNewDepartment());
         editButton.addActionListener(e -> editDepartment());
         deleteButton.addActionListener(e -> deleteDepartment());
+        //automatyczne sortowanie, można to samo włączyć w edytorze graficznym zaznaczając autoCreateRowSorter
+        // niby bardzo fajnie soruje zawartośc tablicy ale nie o to nam do końca chodzi
+        //cvhcemy dostać event o sortowaniu (kliknieciu) i wysłać nowego selecyta do bazy
+        //z odpowiednim "ORDER BY"
+        departmentsTable.setAutoCreateRowSorter(true);
         try {
             refreshDepartmentsTab();
         } catch (UserMessageException e) {
@@ -41,11 +46,25 @@ public class Departments {
         return panel;
     }
 
-    private void deleteDepartment() {
+    private int getSelectedModelRow(){
         int selectedRow = departmentsTable.getSelectedRow();
         if (selectedRow < 0) { //nic nie zaznaczone, może pusto?
+            return selectedRow;
+        }
+        //ważne - konversja zaznaczonego na ekranie na index w modelu
+        //dane w modelu są trzymane w takiej kolejności jak przyszły
+        //tylko do wyswietlania brane w kolejnosci wynikajacej z sortowania
+        //zakomentuj tą linie i zobacz co sie stanie
+        selectedRow = departmentsTable.convertRowIndexToModel(selectedRow);
+        return selectedRow;
+    }
+
+    private void deleteDepartment() {
+        int selectedRow = getSelectedModelRow();
+        if (selectedRow < 0) {
             return;
         }
+
         //id jest pierwszą kolumną, wartośc wyciagamy z modelu, zakładamy,że jest typu int
         Object objectId = departmentsTable.getModel().getValueAt(selectedRow, 0);
 
@@ -73,7 +92,7 @@ public class Departments {
     }
 
     private void editDepartment() {
-        int selectedRow = departmentsTable.getSelectedRow();
+        int selectedRow = getSelectedModelRow();
         if (selectedRow < 0) {
             return;
         }
@@ -142,6 +161,7 @@ public class Departments {
         departmentsTable.setModel(tableModel);
         departmentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (tableModel.getRowCount() > 0) {
+            departmentsTable.getRowSorter().toggleSortOrder(1);//po zmianie danych ustaw sortowanie na na nazwę
             departmentsTable.setRowSelectionInterval(0, 0);
         }
     }
