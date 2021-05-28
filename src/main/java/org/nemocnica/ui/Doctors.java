@@ -1,11 +1,14 @@
 package org.nemocnica.ui;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.AppProperties;
 import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -20,14 +23,39 @@ public class Doctors {
     private JButton addButton;
     private JButton deleteButton;
     private JButton editButton;
+    private JTextField nameFilter;
+    private JTextField surnameFilter;
+    private JButton clearFilterButton;
 
     Connection connection;
+
+    DocumentListener filterEventListener = new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            doFilter();
+        }
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            doFilter();
+        }
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            doFilter();
+        }
+    };
 
     public Doctors(Connection connection) {
         this.connection = connection;
         addButton.addActionListener(e -> addNewDoctor());
         editButton.addActionListener(e -> editDoctor());
         deleteButton.addActionListener(e -> deleteDoctor());
+        clearFilterButton.addActionListener(e->{
+            nameFilter.setText("");
+            surnameFilter.setText("");
+        });
+
+        nameFilter.getDocument().addDocumentListener(filterEventListener);
+        surnameFilter.getDocument().addDocumentListener(filterEventListener);
 
         try {
             refreshDoctorsTab();
@@ -38,6 +66,14 @@ public class Doctors {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    private void doFilter(){
+        try {
+            refreshDoctorsTab();
+        } catch (UserMessageException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     private void deleteDoctor() {
@@ -110,11 +146,36 @@ public class Doctors {
     TableModel getTableModel() throws UserMessageException {
 
         try (Statement stmt = connection.createStatement()) {
+            String filterNameString  = nameFilter.getText();
+            String filterSurnameString = surnameFilter.getText();
             String sql =
                     "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+
                             "FROM DOCTORS " +
                             "LEFT JOIN DEPARTMENTS ON DOCTORS.department_id=DEPARTMENTS.department_id "+
                             "LEFT JOIN DOCTORS AS DOC2 ON DOCTORS.chief_doctor_id = DOC2.doctor_id";
+            String filterString = " WHERE";
+            boolean andRequired = false;
+
+            if(!StringUtils.isEmpty(filterNameString)){
+                if( andRequired){
+                    filterString += " AND";
+                }
+                filterString += " DOCTORS.name LIKE '%" + filterNameString + "%'";
+                andRequired = true;
+            }
+
+            if(!StringUtils.isEmpty(filterSurnameString)){
+                if( andRequired){
+                    filterString += " AND";
+                }
+                filterString += " DOCTORS.surname LIKE '%" + filterSurnameString + "%'";
+                andRequired = true;
+            }
+
+            if( andRequired ){
+                sql += filterString;
+            }
+
             String columnNames[] = new String[]{
                     "id", "Imię", "Nazwisko", "Specjalizacja", "Stanowisko", "Przełozony",  "Departament", "Płaca"
 

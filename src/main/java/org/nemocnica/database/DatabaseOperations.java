@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.sql.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 
 public class DatabaseOperations {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseOperations.class.getName());
-    private static final String PARAM_CREATE = ";create=true";
+    private static final String PARAM_CREATE = ";create=true;collation=TERRITORY_BASED:SECONDARY";
 
 
     public static Connection connectToDatabase(String pathName) throws UserMessageException {
