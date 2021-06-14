@@ -67,7 +67,7 @@
             </constraints>
             <properties>
               <editable value="false"/>
-              <text value="dupa"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="e7465" class="javax.swing.JButton" binding="backButton">

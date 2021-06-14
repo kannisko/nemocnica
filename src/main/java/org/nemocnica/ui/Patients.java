@@ -1,10 +1,13 @@
 package org.nemocnica.ui;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nemocnica.database.DatabaseOperations;
 import org.nemocnica.utils.ComboDictionaryItem;
 import org.nemocnica.utils.UserMessageException;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -18,8 +21,28 @@ public class Patients {
     private JButton editButton;
     private JButton addButton;
     private JButton deleteButton;
+    private JTextField patientSurnameFilter;
+    private JTextField surnameFilter;
+    private JTextField departmentFilter;
+    private JButton clearFilterButton;
 
     Connection connection;
+
+    DocumentListener filterEventListener = new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            doFilter();
+
+        }
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            doFilter();
+        }
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            doFilter();
+        }
+    };
 
     public Patients(Connection connection) {
         this.connection = connection;
@@ -27,6 +50,15 @@ public class Patients {
         editButton.addActionListener(e -> editPatient());
         deleteButton.addActionListener(e -> deletePatient());
 
+        clearFilterButton.addActionListener(e->{
+            patientSurnameFilter.setText("");
+            surnameFilter.setText("");
+            departmentFilter.setText("");
+        });
+
+        patientSurnameFilter.getDocument().addDocumentListener(filterEventListener);
+        surnameFilter.getDocument().addDocumentListener(filterEventListener);
+        departmentFilter.getDocument().addDocumentListener(filterEventListener);
 
         try {
             refreshPatientsTab();
@@ -37,6 +69,16 @@ public class Patients {
 
     public JPanel getPanel () {
         return panel;
+    }
+
+    private void doFilter(){
+        try {
+            refreshPatientsTab();
+
+        } catch (UserMessageException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
     }
 
     private void deletePatient() {
@@ -101,16 +143,53 @@ public class Patients {
     TableModel getTableModel () throws UserMessageException {
 
         try (Statement stmt = connection.createStatement()) {
+
             String sql =
                     "SELECT PATIENTS.patient_id, PATIENTS.name, PATIENTS.surname, PATIENTS.main_doctor_id, DOCTORS.name, DOCTORS.surname, PATIENTS.department_id, DEPARTMENTS.name " +
                             "FROM PATIENTS " +
                             "LEFT JOIN DEPARTMENTS ON PATIENTS.department_id = DEPARTMENTS.department_id " +
                     "LEFT JOIN DOCTORS ON PATIENTS.main_doctor_id = DOCTORS.doctor_id ";
 
+            String patientSurnameString  = patientSurnameFilter.getText();
+            String filterSurnameString = surnameFilter.getText();
+            String filterDepartmentString = departmentFilter.getText();
+            String filterString = " WHERE";
+            boolean andRequired = false;
+
+            if(!StringUtils.isEmpty(patientSurnameString)){
+                if( andRequired){
+                    filterString += " AND";
+                }
+                filterString += " PATIENTS.surname LIKE '%" + patientSurnameString + "%'";
+                andRequired = true;
+            }
+
+            if(!StringUtils.isEmpty(filterSurnameString)){
+                if( andRequired){
+                    filterString += " AND";
+                }
+                filterString += " DOCTORS.surname LIKE '%" + filterSurnameString + "%'";
+                andRequired = true;
+            }
+
+            if(!StringUtils.isEmpty(filterDepartmentString)){
+                if( andRequired){
+                    filterString += " AND";
+                }
+                filterString += " DEPARTMENTS.name LIKE '%" + filterDepartmentString + "%'";
+                andRequired = true;
+            }
+
+
+            if( andRequired ){
+                sql += filterString;
+            }
+
             String[] columnNames = new String[]{
                     "id", "Imie", "Nazwisko", "Doktor prowadzący", "Nazwa oddziału"
 
             };
+
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
@@ -159,5 +238,5 @@ public class Patients {
             patientsTable.setRowSelectionInterval(0, 0);
         }
     }
-    
+
 }

@@ -82,9 +82,10 @@ public class AdminPanel{
     }
 
     private void onExportData(){
-        //katalog do którego wywalić tablice, może doróbcie jakis wybór?
-        String exportToPath = "nemocnica.dump";
-        ROW_EXPORTER exporter = ROW_EXPORTER.TO_SQL_INSERT; //też może jakiś wybór zrobić?
+
+        String exportToPath = "Eksport danych";
+        /*ROW_EXPORTER exporter = ROW_EXPORTER.TO_SQL_INSERT; */
+        ROW_EXPORTER exporter = ROW_EXPORTER.TO_CSV;
         try{
         DatabaseOperations.exportDataBase(appProperties.getDatabasenamePath(),exportToPath,exporter);
             JOptionPane.showMessageDialog(topLevelFrame, "Tables exported");

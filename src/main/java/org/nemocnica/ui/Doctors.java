@@ -10,12 +10,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.Vector;
+import java.util.*;
 
 public class Doctors {
     private JPanel panel;
@@ -23,16 +22,18 @@ public class Doctors {
     private JButton addButton;
     private JButton deleteButton;
     private JButton editButton;
-    private JTextField nameFilter;
+    private JTextField medSpecFilter;
     private JTextField surnameFilter;
     private JButton clearFilterButton;
 
     Connection connection;
 
+
     DocumentListener filterEventListener = new DocumentListener() {
         @Override
         public void insertUpdate(DocumentEvent e) {
             doFilter();
+
         }
         @Override
         public void removeUpdate(DocumentEvent e) {
@@ -50,11 +51,11 @@ public class Doctors {
         editButton.addActionListener(e -> editDoctor());
         deleteButton.addActionListener(e -> deleteDoctor());
         clearFilterButton.addActionListener(e->{
-            nameFilter.setText("");
+            medSpecFilter.setText("");
             surnameFilter.setText("");
         });
 
-        nameFilter.getDocument().addDocumentListener(filterEventListener);
+        medSpecFilter.getDocument().addDocumentListener(filterEventListener);
         surnameFilter.getDocument().addDocumentListener(filterEventListener);
 
         try {
@@ -62,7 +63,11 @@ public class Doctors {
         } catch (UserMessageException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
+
+
     }
+
 
     public JPanel getPanel() {
         return panel;
@@ -71,9 +76,11 @@ public class Doctors {
     private void doFilter(){
         try {
             refreshDoctorsTab();
+
         } catch (UserMessageException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
     }
 
     private void deleteDoctor() {
@@ -106,6 +113,8 @@ public class Doctors {
             } catch (UserMessageException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
+
+
         }
     }
 
@@ -140,13 +149,14 @@ public class Doctors {
             } catch (UserMessageException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
+
         }
     }
 
     TableModel getTableModel() throws UserMessageException {
 
         try (Statement stmt = connection.createStatement()) {
-            String filterNameString  = nameFilter.getText();
+            String filterMedSpecString  = medSpecFilter.getText();
             String filterSurnameString = surnameFilter.getText();
             String sql =
                     "SELECT DOCTORS.doctor_id,DOCTORS.name,DOCTORS.surname,DOCTORS.med_specialisation,DOCTORS.position,DOCTORS.chief_doctor_id,DOCTORS.department_id,DEPARTMENTS.name,DOCTORS.salary,DOC2.name,DOC2.surname "+
@@ -156,11 +166,11 @@ public class Doctors {
             String filterString = " WHERE";
             boolean andRequired = false;
 
-            if(!StringUtils.isEmpty(filterNameString)){
+            if(!StringUtils.isEmpty(filterMedSpecString)){
                 if( andRequired){
                     filterString += " AND";
                 }
-                filterString += " DOCTORS.name LIKE '%" + filterNameString + "%'";
+                filterString += " DOCTORS.med_specialisation LIKE '%" + filterMedSpecString + "%'";
                 andRequired = true;
             }
 
@@ -242,5 +252,30 @@ public class Doctors {
         if (tableModel.getRowCount() > 0) {
             doctorsTable.setRowSelectionInterval(0, 0);
         }
+
+
     }
+
+    private void sortTab() throws UserMessageException{
+        TableModel tableModel = getTableModel();
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
+        doctorsTable.setRowSorter(sorter);
+
+        sorter.setModel(doctorsTable.getModel());
+        sorter.setComparator(0, new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer name1, Integer name2) {
+                return Integer.valueOf(name1).compareTo(Integer.valueOf(name2));
+
+            }
+        });
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+        sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
+
+        doctorsTable.setRowSorter(sorter);
+        sorter.setSortKeys(sortKeys);
+
+    }
+
 }

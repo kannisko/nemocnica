@@ -4,3 +4,4 @@ target/
 *.log
 /nemocnica.db/
 /nemocnica.dump/
+/Eksport danych/
